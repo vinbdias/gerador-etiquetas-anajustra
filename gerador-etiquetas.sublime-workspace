@@ -1,0 +1,834 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"str_re",
+				"str_repeat〔function〕"
+			],
+			[
+				"asso",
+				"associado"
+			],
+			[
+				"rs",
+				"respostaViaCep"
+			],
+			[
+				"to",
+				"toUTF8\t(Encoding.php)"
+			],
+			[
+				"utf",
+				"utf8_encode"
+			],
+			[
+				"strin",
+				"string_analise\t(Associado.class.php)"
+			],
+			[
+				"strt",
+				"strtoupper\t(ConexaoPDOFactory.class.php)"
+			],
+			[
+				"string",
+				"string_analise"
+			],
+			[
+				"Re",
+				"ReflectionClass〔class〕"
+			],
+			[
+				"atri",
+				"atributoEndereco"
+			],
+			[
+				"c",
+				"compararEnderecoCadastradoComValidadoNosCorreios〔function〕"
+			],
+			[
+				"es",
+				"estado\t(ValidadorCEP.class.php)"
+			],
+			[
+				"ba",
+				"bairro\t(ValidadorCEP.class.php)"
+			],
+			[
+				"valida",
+				"validadorCEP"
+			],
+			[
+				"associa",
+				"associadoDAO"
+			],
+			[
+				"is",
+				"is_array"
+			],
+			[
+				"exe",
+				"executaConsulta\t(AppDAO.class.php)"
+			],
+			[
+				"ex",
+				"executeQuery〔function〕"
+			],
+			[
+				"ob",
+				"obterConexaoPDO\t(ConexaoDBFactory.class.php)"
+			],
+			[
+				"mon",
+				"montaStringDeConexao"
+			],
+			[
+				"00",
+				"00000-000\t(2018-05-11_08-33.txt)"
+			],
+			[
+				"valid",
+				"validadorCEP"
+			],
+			[
+				"val",
+				"validadorCEP"
+			],
+			[
+				"json",
+				"json_decode"
+			],
+			[
+				"jso",
+				"json_encode\t(pesquisa-nome-cpf.php)"
+			],
+			[
+				"name",
+				"namespace\t(Address.php)"
+			],
+			[
+				"Mas",
+				"MascaraHelper"
+			],
+			[
+				"log",
+				"log_string"
+			],
+			[
+				"linha",
+				"linha_erro_string"
+			],
+			[
+				"DateT",
+				"DateTimeFactory〔class〕"
+			],
+			[
+				"DateTimeFac",
+				"DateTimeFactory.class.php\t(gera-etiquetas-nome-cpf.php)"
+			],
+			[
+				"Date",
+				"DateTimeZoneFactory\t(DateTimeZoneFactory.class.php)"
+			],
+			[
+				"def",
+				"define〔keyword〕"
+			],
+			[
+				"Spf",
+				"SplFileObject〔class〕"
+			],
+			[
+				"get",
+				"getSplFileOject\t(SplFileObjectFactory.class.php)"
+			],
+			[
+				"SplF",
+				"SplFileObjectFactory\t(SplFileObjectFactory.class.php)"
+			],
+			[
+				"Spl",
+				"SplFileObject\t(gera-etiquetas-nome-cpf.php)"
+			],
+			[
+				"Dat",
+				"DateTimeFactory\t(DateTimeFactory.class.php)"
+			],
+			[
+				"DateTi",
+				"DateTimeZone〔class〕"
+			],
+			[
+				"fun",
+				"function\t(GeradorEtiquetasController.js)"
+			],
+			[
+				"time",
+				"timezone"
+			],
+			[
+				"str_rep",
+				"str_replace〔function〕"
+			],
+			[
+				"_inicia",
+				"_inicializaTagsManager"
+			],
+			[
+				"gera",
+				"geradorEtiquetasController〔variable〕"
+			],
+			[
+				"gerador",
+				"geradorEtiquetasController"
+			],
+			[
+				"_in",
+				"_inputNome"
+			],
+			[
+				"_inp",
+				"_inputNome"
+			],
+			[
+				"_input",
+				"_inputNome"
+			],
+			[
+				"_inic",
+				"_inicializar_jQueryMaskPlugin"
+			],
+			[
+				"gerad",
+				"geradorEtiquetasController"
+			],
+			[
+				"_inpu",
+				"_inputCpf"
+			],
+			[
+				"ger",
+				"geradorEtiquetasController"
+			],
+			[
+				"lista",
+				"listaAssociados"
+			],
+			[
+				"_",
+				"_inputNome"
+			],
+			[
+				"_lis",
+				"_listaAssociados"
+			],
+			[
+				"_ins",
+				"_instanciarTypeAheadCpf"
+			],
+			[
+				"in",
+				"initialize\t(index.php)"
+			],
+			[
+				"Blo",
+				"BloodhoundFactory\t(index.php)"
+			],
+			[
+				"Bloo",
+				"BloodhoundFactory\t(BloodhoundFactory.js)"
+			],
+			[
+				"remote",
+				"remoteUrl"
+			],
+			[
+				"Blood",
+				"BloodhoundFactory"
+			],
+			[
+				"Bl",
+				"BloodhoundFactory"
+			],
+			[
+				"busca",
+				"busca-nome"
+			],
+			[
+				"marg",
+				"margin-bottom\tproperty"
+			],
+			[
+				"ids",
+				"ids_associados"
+			],
+			[
+				"su",
+				"submit〔function〕"
+			],
+			[
+				"id",
+				"ids_associados"
+			],
+			[
+				"word",
+				"word-break\tproperty"
+			],
+			[
+				"ass",
+				"associadosAGerarEtiqueta"
+			],
+			[
+				"associ",
+				"associado"
+			],
+			[
+				"Gerador",
+				"GeradorEtiquetasController\t(GeradorEtiquetasController.js)"
+			],
+			[
+				"ne",
+				"negociacaoController"
+			],
+			[
+				"Negoc",
+				"NegociacaoController"
+			],
+			[
+				"Neo",
+				"NegociacaoService"
+			],
+			[
+				"Negocia",
+				"Negociacao"
+			],
+			[
+				"Mensagem",
+				"MensagemView"
+			],
+			[
+				"Nego",
+				"NegociacoesView"
+			],
+			[
+				"Neg",
+				"NegociacaoDAO"
+			],
+			[
+				"nego",
+				"negociacoes"
+			],
+			[
+				"obter",
+				"obterNegociacoes"
+			],
+			[
+				"neg",
+				"negociacoes"
+			],
+			[
+				"impo",
+				"importaNegociacoes\t(NegociacaoController.js)"
+			],
+			[
+				"Ne",
+				"NegociacaoService"
+			],
+			[
+				"negocia",
+				"negociacao"
+			],
+			[
+				"negoc",
+				"negociacao"
+			],
+			[
+				"apa",
+				"apagaTodos\t(NegociacaoDAO.js)"
+			],
+			[
+				"negoci",
+				"negociacoes"
+			],
+			[
+				"list",
+				"listaTodos\t(aprendendo_indexeddb.html)"
+			],
+			[
+				"parse",
+				"parseInt\t(NegociacaoController.js)"
+			],
+			[
+				"negociaca",
+				"negociacao"
+			],
+			[
+				"res",
+				"result"
+			],
+			[
+				"auto",
+				"autoIncrement\t(aprendendo_indexeddb.html)"
+			],
+			[
+				"objectSt",
+				"objectStoreNames\t(aprendendo_indexeddb.html)"
+			],
+			[
+				"simula",
+				"simulacaoController"
+			],
+			[
+				"Negociaca",
+				"Negociacao"
+			],
+			[
+				"op",
+				"openRequest"
+			],
+			[
+				"v",
+				"volume"
+			],
+			[
+				"negociacao",
+				"negociacaoController\t(index.html)"
+			],
+			[
+				"array",
+				"arrayAchatado"
+			],
+			[
+				"Negociacao",
+				"NegociacaoService\t(NegociacaoService.js)"
+			],
+			[
+				"ope",
+				"open(method, url)"
+			],
+			[
+				"Mens",
+				"Mensagem.js\t(index.html)"
+			],
+			[
+				"_mensa",
+				"_mensagemView"
+			],
+			[
+				"Proxy",
+				"ProxyFactory"
+			],
+			[
+				"Prox",
+				"ProxyFactory\t(ProxyFactory.js)"
+			],
+			[
+				"Error",
+				"Error(message)"
+			],
+			[
+				"M",
+				"MensagemView\t(NegociacaoController.js)"
+			],
+			[
+				"inner",
+				"innerHTML\t(NegociacoesView.js)"
+			],
+			[
+				"va",
+				"valor\t(index.html)"
+			],
+			[
+				"text",
+				"textContent"
+			],
+			[
+				"numer",
+				"numero_tentativas"
+			],
+			[
+				"nume",
+				"numero_tentativas"
+			],
+			[
+				"up",
+				"update"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 137.0,
+		"last_filter": "Package Control: insta",
+		"selected_items":
+		[
+			[
+				"Package Control: insta",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ins",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: inst",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: install",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: re",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control:install",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: In",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: Ins",
+				"Package Control: Install Package"
+			],
+			[
+				"rails",
+				"Set Syntax: Ruby on Rails"
+			]
+		],
+		"width": 540.0
+	},
+	"console":
+	{
+		"height": 130.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '6f4c264a24d933ce70df5dedcf1dcaee' + 'ebe013ee18cced0ef93d5f746d80ef60'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
+			"Package Control: Install Package"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra"
+	],
+	"file_history":
+	[
+		"/C/xampp/htdocs/gerador-etiquetas/classes/GeradorEtiquetasMain.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas/2018-05-11_16-10.txt",
+		"/C/xampp/htdocs/gerador-etiquetas/vendor/phpclasses/dao-for-php/DAO.php",
+		"/C/xampp/htdocs/gerador-etiquetas/dao/AppDAO.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas/services/ConexaoPDOFactory.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas/dao/AssociadoDAO.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas/gera-etiquetas-nome-cpf.php",
+		"/C/xampp/htdocs/gerador-etiquetas/services/ViaCEPService.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas/services/FusoHorarioFactory.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas/services/DataHoraFactory.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas/services/ArquivoLogFactory.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas/classes/Associado.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas/composer.json",
+		"/C/xampp/htdocs/gerador-etiquetas/fpdf/fpdf.php",
+		"/C/xampp/htdocs/gerador-etiquetas/vendor/neitanod/forceutf8/src/ForceUTF8/Encoding.php",
+		"/C/xampp/htdocs/gerador-etiquetas/functions.php",
+		"/C/xampp/htdocs/gerador-etiquetas/2018-05-10_17-56.txt",
+		"/C/xampp/htdocs/gerador-etiquetas/composer.lock",
+		"/C/xampp/htdocs/gerador-etiquetas/vendor/composer/autoload_real.php",
+		"/C/xampp/htdocs/gerador-etiquetas/validar-cep.php",
+		"/C/xampp/htdocs/gerador-etiquetas/2018-05-11_08-33.txt",
+		"/C/xampp/htdocs/gerador-etiquetas/services/ValidadorCEP.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas/pesquisa-nome-cpf.php",
+		"/C/xampp/htdocs/gerador-etiquetas/classes/LogDepuracao.class.php",
+		"/C/xampp/php/php.ini",
+		"/C/xampp/htdocs/gerador-etiquetas/configdb.ini",
+		"/C/xampp/htdocs/gerador-etiquetas/2018-05-11_08-50.txt",
+		"/C/xampp/htdocs/gerador-etiquetas/helpers/MascaraHelper.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas/vendor/composer/autoload_classmap.php",
+		"/C/xampp/htdocs/gerador-etiquetas/js/app-es6/models/ListaAssociados.js",
+		"/C/xampp/htdocs/gerador-etiquetas/2018-05-10_15-16.txt",
+		"/C/xampp/htdocs/gerador-etiquetas/2018-05-10_15-18.txt",
+		"/C/xampp/htdocs/gerador-etiquetas/js/app-es6/controllers/GeradorEtiquetasController.js",
+		"/C/xampp/htdocs/gerador-etiquetas/index.php",
+		"/C/xampp/htdocs/gerador-etiquetas/js/app-es6/services/BloodhoundFactory.js",
+		"/C/xampp/htdocs/gerador-etiquetas/services/DateTimeFactory.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas/gera-etiquetas-nome.php",
+		"/C/xampp/htdocs/gerador-etiquetas/js/app/services/BloodhoundFactory.js",
+		"/C/xampp/htdocs/gerador-etiquetas/js/app/controllers/GeradorEtiquetasController.js",
+		"/C/xampp/htdocs/gerador-etiquetas/js/app/models/ListaAssociados.js",
+		"/C/xampp/htdocs/gerador-etiquetas/pesquisa-cpf.php",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/services/ConnectionFactory.js",
+		"/C/xampp/htdocs/gerador-etiquetas/package.json",
+		"/C/alura/js_avancado_III/aluraframe/client/package.json",
+		"/C/xampp/htdocs/gerador-etiquetas/js/app/controllers/GeradorEtiquetasController.js.map",
+		"//192.168.1.160/e$/WWWSITE/api/gerador-etiquetas-2018-05-09/index.php",
+		"/C/xampp/htdocs/gerador-etiquetas/.babelrc",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app/services/ConnectionFactory.js",
+		"/C/xampp/htdocs/gerador-etiquetas/js/app/services/BloodHoundFactory.js",
+		"/C/xampp/htdocs/gerador-etiquetas/pesquisa-nome.php",
+		"/C/xampp/htdocs/gerador-etiquetas/js/app/services/HttpService.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/services/NegociacaoService.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/controllers/NegociacaoController.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/services/HttpService.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/dao/NegociacaoDAO.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/models/Negociacao.js",
+		"/C/xampp/htdocs/simulador_calc_rra/js/app-es6/controllers/SimulacaoController.js",
+		"//192.168.1.160/e$/WWWSITE/api/gerador-etiquetas/index.php",
+		"/C/alura/react_I/cdc-admin/src/index.js",
+		"/C/alura/react_I/index.html",
+		"/C/alura/react_I/cdc-admin/src/App.css",
+		"/C/alura/react_I/cdc-admin/src/App.js",
+		"/C/alura/react_I/cdc-admin/public/index.html",
+		"/C/alura/js_avancado_III/aluraframe/client/index.html",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/views/NegociacoesView.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/boot.js",
+		"/C/wamp64/www/simulador_calc_rra/js/app/controllers/SimulacaoController.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/helpers/Bind.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/services/ProxyFactory.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/models/Mensagem.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/models/ListaNegociacoes.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/views/View.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/views/MensagemView.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/helpers/DateHelper.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app/lib/TesteBiblioteca.js",
+		"/C/alura/js_avancado_III/aluraframe/client/.babelrc",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app/controllers/NegociacaoController.js",
+		"/C/wamp64/www/simulador_calc_rra/package.json",
+		"/C/wamp64/www/simulador_calc_rra/js/app/datasource/DataSource.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app/models/ListaNegociacoes.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app/polyfill/fetch.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app/dao/NegociacaoDAO.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app/services/ProxyFactory.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app/services/HttpService.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app/services/NegociacaoService.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app/models/Negociacao.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app/models/Mensagem.js",
+		"/C/alura/js_avancado_III/aluraframe/client/aprendendo_indexeddb.html",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app/helpers/DateHelper.js",
+		"/C/alura/js_avancado_II/aluraframe/client/js/app/controllers/NegociacaoController.js",
+		"/C/alura/js_avancado_II/aluraframe/client/js/app/models/ListaNegociacoes.js",
+		"/C/alura/js_avancado_III/aluraframe/client/js/app/views/NegociacoesView.js",
+		"/C/alura/js_avancado_II/aluraframe/client/js/app/views/NegociacoesView.js",
+		"/C/alura/js_avancado_II/aluraframe/client/js/app/models/Negociacao.js",
+		"/C/wamp64/www/simulador_calc_rra/index.html",
+		"/C/wamp64/www/simulador_calc_rra/js/app/models/Simulacao.js",
+		"/C/wamp64/www/simulador_calc_rra/visualiza_vrl_precatorio_jud.asp",
+		"/C/alura/js_avancado_II/aluraframe/client/js/app/services/NegociacaoService.js",
+		"/C/Users/Vinicius/AppData/Roaming/Sublime Text 3/Packages/SublimeTmpl/Side Bar.sublime-menu",
+		"/C/alura/js_avancado_II/aluraframe/client/index.html",
+		"/C/alura/js_avancado_II/aluraframe/client/js/app/services/HttpService.js",
+		"/C/alura/js_avancado_II/aluraframe/client/js/app/helpers/DateHelper.js",
+		"/C/alura/js_avancado_II/aluraframe/server/app/api/index.js",
+		"/C/alura/js_avancado_II/aluraframe/client/js/app/models/Mensagem.js",
+		"/C/alura/js_avancado_II/aluraframe/client/js/app/views/View.js",
+		"/C/alura/js_avancado_II/aluraframe/client/js/app/services/ProxyFactory.js",
+		"/C/alura/js_avancado_II/aluraframe/client/js/app/helpers/Bind.js",
+		"/C/alura/js_avancado_I/javascript-avancado-i-aula1/aluraframe/client/js/app/controllers/NegociacaoController.js",
+		"/C/Users/VinBDias/AppData/Roaming/Sublime Text 3/Packages/Laravel 5 Artisan/Laravel 5 Artisan.sublime-settings",
+		"/C/alura/js_avancado_I/javascript-avancado-i-aula1/aluraframe/client/js/app/models/Mensagem.js",
+		"/C/alura/js_avancado_I/javascript-avancado-i-aula1/aluraframe/client/js/app/views/NegociacoesView.js",
+		"/C/alura/js_avancado_I/javascript-avancado-i-aula1/aluraframe/client/js/app/views/View.js",
+		"/C/alura/js_avancado_I/javascript-avancado-i-aula1/aluraframe/client/js/app/views/MensagemView.js",
+		"/C/alura/js_avancado_I/javascript-avancado-i-aula1/aluraframe/client/js/app/models/Negociacao.js",
+		"/C/alura/js_avancado_I/javascript-avancado-i-aula1/aluraframe/client/js/app/helpers/DateHelper.js",
+		"/C/alura/js_avancado_I/javascript-avancado-i-aula1/aluraframe/client/index.html",
+		"/C/Users/VinBDias/AppData/Roaming/Sublime Text 3/Packages/User/TernJS.sublime-settings",
+		"/C/alura/js_avancado_I/package-lock.json",
+		"/C/alura/js_avancado_I/javascript-avancado-i-aula1/aluraframe/client/js/index.js",
+		"/C/alura/js_avancado_I/javascript-avancado-i-aula1/aluraframe/client/js/models/Negociacao.js",
+		"/C/alura/js_avancado_I/js/index.js",
+		"/C/alura/react_parte_1/cdc-admin/src/App.js",
+		"/C/alura/react_parte_1/cdc-admin/src/index.js",
+		"/C/alura/react_parte_1/cdc-admin/public/index.html",
+		"/C/bash_on_ubuntu_on_windows/curso_ruby_alura/rascunho_exercicios.rb",
+		"/C/bash_on_ubuntu_on_windows/curso_ruby_alura/maior_ou_menor.rb",
+		"/C/r_on_r_on_bash_on_ubuntu_on_windows/colchonet/lib/tasks/migrar_senhas.rake",
+		"/C/r_on_r_on_bash_on_ubuntu_on_windows/colchonet/db/migrate/20180402001204_add_password_digest_to_users.rb"
+	],
+	"find":
+	{
+		"height": 28.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"$this->pdf",
+			"$pdf",
+			"$m",
+			"$i",
+			"die",
+			"n fix",
+			"DIE",
+			"$row",
+			"this->con",
+			"Ç",
+			"die",
+			"nome-input",
+			"tagManager",
+			"tagmanager",
+			"nome-input",
+			"class",
+			"bind",
+			"forEach",
+			"._data",
+			"                    \n",
+			");            \t           ",
+			"view",
+			"crypt"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"$this->fpdf",
+			"$this->pdf",
+			"$this>pdf",
+			"$associado",
+			"className"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 28.0
+	},
+	"input":
+	{
+		"height": 40.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.SublimeLinter":
+	{
+		"height": 0.0
+	},
+	"output.SublimeLinter Messages":
+	{
+		"height": 102.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "gerador-etiquetas.sublime-project",
+	"replace":
+	{
+		"height": 52.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 389.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

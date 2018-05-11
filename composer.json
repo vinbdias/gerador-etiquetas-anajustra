@@ -1,0 +1,29 @@
+{
+    "name": "vinbdias/gerador-etiquetas",
+    "description": "Gerador de etiquetas para envio da revista ANAJUSTRA aos seus associados.",
+    "require": {
+        "flyingluscas/viacep-php": "^1.0",
+        "phpclasses/dao-for-php": ">=1.0.1",
+        "neitanod/forceutf8": "~2.0"
+    },  
+    "repositories":
+    [
+        {
+          "type": "composer",
+          "url": "https:\/\/www.phpclasses.org\/"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/neitanod/forceutf8"
+        },
+        {
+          "packagist": false
+        }
+    ],    
+    "authors": [
+        {
+            "name": "vinbdias",
+            "email": "vinicius.dias@anajustra.org"
+        }
+    ]
+}
