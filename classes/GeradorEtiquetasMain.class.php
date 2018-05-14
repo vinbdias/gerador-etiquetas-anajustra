@@ -7,6 +7,9 @@
 
     use \ForceUTF8\Encoding;
 
+    /**
+     * Classe que implementa a execução de páginas com o intuito de gerar arquivos para impressão de etiquetas de endereço
+     */
     class GeradorEtiquetasMain {
 
         private $fpdf = NULL;
@@ -20,6 +23,8 @@
         private $planilhaExcel;
 
         private $logDepuracao = NULL;
+        private $logString = '';
+
         private $associadoDAO = NULL;
         private $associadoObj = NULL;  
 
@@ -27,6 +32,10 @@
 
         private $saidaEm = 'pdf';
 
+        /**
+         * Método construtor
+         * @param string $saidaEm
+         */
         public function __construct($saidaEm = '') {
 
             $this->saidaEm = $saidaEm;
@@ -35,6 +44,9 @@
             $this->associadoDAO = new AssociadoDAO();
         }
 
+        /**
+         * Método que implementa a execução da página gera-etiquetas-nome-cpf.php
+         */
         public function geraEtiquetasNomeCpf($listaIdsAssociados) {
 
             $this->associados = $this->associadoDAO->obterAssociadosAPartirDeListaDeIDs($listaIdsAssociados);
@@ -47,110 +59,121 @@
             $this->__main();           
         }
 
+        /**
+         * Método que implementa aspectos comuns a todas as execuções de páginas que geram arquivos para impressão de etiquetas
+         */
         private function __main() {
 
+            //Iniciar o arquivo de log
             $this->logDepuracao = ArquivoLogFactory::getArquivoLog();         
+            $this->logString = 'CONSULTA SQL EXECUTADA: ' . $this->associadoDAO->getStringConsultaSql() . PHP_EOL . PHP_EOL;            
 
-            $log_string = 'CONSULTA SQL EXECUTADA: ' . $this->associadoDAO->getStringConsultaSql() . PHP_EOL . PHP_EOL;            
-
+            //Percorrer pelos associados armazenados
             foreach($this->associados as $key => $associado) {
 
-                $associadoObj = new Associado($associado);
+                //Iniciar classe modelo
+                $this->associadoObj = new Associado($associado);
 
-                $nome = trim(str_ireplace(array('pensionista', 'pencionista', '(', ')'), '', $associado['NOME_TITULAR']));        
+                //Iniciar log da linha do associado em questão / iteração do loop
+                $this->logString .= 'ASSOCIADO LINHA ' . (string)($key + 1) . PHP_EOL .
+                                'Nome: ' . $this->associadoObj->nome . PHP_EOL .
+                                'Matricula: ' . $this->associadoObj->matricula . PHP_EOL;        
 
-                $log_string .= 'ASSOCIADO LINHA ' . (string)($key + 1) . PHP_EOL .
-                                'Nome: ' . $nome . PHP_EOL .
-                                'Matricula: ' . $associado['MATRICULA'] . PHP_EOL;        
+                //Se o endereço for vazio, pular linha e não gerar etiqueta para o associado em questão
+                if(empty($this->associadoObj->endereco)) {
 
-                if(empty(trim($associado['ENDERECO']))) {
-
-                    $log_string .= 'ETIQUETA NAO GERADA! CAMPO ENDERECO VAZIO!' . PHP_EOL . PHP_EOL;
+                    $this->logString .= 'ETIQUETA NAO GERADA! CAMPO ENDERECO VAZIO!' . PHP_EOL . PHP_EOL;
                     continue;
-                }                    
+                }         
 
-                $cep = MascaraHelper::formataMascara($associado['CEP'], '#####-###');        
+                $cep = MascaraHelper::formataMascara($this->associadoObj->cep, '#####-###');        
                 $validadorCEP = new ValidadorCEP();
 
+                //Se o CEP for vazio, pular linha e não gerar etiqueta para o associado em questão                
                 if(empty($cep)) {
                     
-                    $log_string .= 'ETIQUETA NAO GERADA! CAMPO CEP VAZIO!' . PHP_EOL . PHP_EOL;            
+                    $this->logString .= 'ETIQUETA NAO GERADA! CAMPO CEP VAZIO!' . PHP_EOL . PHP_EOL;            
                     continue;
                 }
 
                 $validadorCEP->validar($cep);
-            
-                if($validadorCEP->cep != '') {
+                
+                //Se o CEP não for válido, pular linha e não gerar etiqueta para o associado em questão
+                if(!empty($validadorCEP->cep)) {
                     
-                    $log_string .= 'CEP validado nos Correios (https://viacep.com.br/)' . PHP_EOL;
+                    $this->logString .= 'CEP validado nos Correios (https://viacep.com.br/)' . PHP_EOL;
                 }
                 else {
                     
-                    $log_string .= 'ETIQUETA NAO GERADA! CEP ' . $cep . ' NAO FOI VALIDADO NOS CORREIOS (https://viacep.com.br/ws/' . $cep . '/json/)' . PHP_EOL . PHP_EOL;
+                    $this->logString .= 'ETIQUETA NAO GERADA! CEP ' . $cep . ' NAO FOI VALIDADO NOS CORREIOS (https://viacep.com.br/ws/' . $cep . '/json/)' . PHP_EOL . PHP_EOL;
                     continue;
                 }           
 
                 $bairro_cidade_estado = NULL;
-                if(isset($associado['BAIRRO']) && $associado['BAIRRO'] != '') {
 
-                    $log_string .= 'Associado com cadastro na tabela funcional.' . PHP_EOL;
+                //Caso o campo bairro esteja preenchido, assumir que o associado passou por recadastramento de endereço
+                if(isset($this->associadoObj->bairro) && $this->associadoObj->bairro != '') {
 
-                    $log_string .= 'INICIANDO análise/comparação do endereço cadastrado com o obtido a partir do CEP nos Correios' . PHP_EOL;
-                    $analise_comparacao = $associadoObj->compararEnderecoCadastradoComValidadoNosCorreios($validadorCEP);
-                    $log_string .= $analise_comparacao;
-                    $log_string .= 'Análise/comparação FINALIZADA' . PHP_EOL;
+                    $this->logString .= 'Associado com cadastro na tabela funcional.' . PHP_EOL;
 
-                    if(!empty($associado['NUMERO']))
-                        $associado['ENDERECO'] = str_replace(array('1', '2', '3', '4', '5', '6', '7', '8', '9', '0'), '', $associado['ENDERECO']);
+                    $this->logString .= 'INICIANDO análise/comparação do endereço cadastrado com o obtido a partir do CEP nos Correios' . PHP_EOL;
+                    $analise_comparacao = $this->associadoObj->compararEnderecoCadastradoComValidadoNosCorreios($validadorCEP);
+                    $this->logString .= $analise_comparacao;
+                    $this->logString .= 'Análise/comparação FINALIZADA' . PHP_EOL;
 
-                    $ende = ((isset($validadorCEP->endereco) && $validadorCEP->endereco != '') ? $validadorCEP->endereco : $associado['ENDERECO']) . ' ' .
-                        $associado['NUMERO'] . ' ' .
+                    $ende = ((isset($validadorCEP->endereco) && $validadorCEP->endereco != '') ? $validadorCEP->endereco : $this->associadoObj->endereco) . ' ' .
+                        $this->associadoObj->numero . ' ' .
                         $validadorCEP->complemento;
 
-                    $bairro_cidade_estado = ((isset($validadorCEP->bairro) && $validadorCEP->bairro != '') ? $validadorCEP->bairro : $associado['BAIRRO']) . ', ' .
-                        ((isset($validadorCEP->cidade) && $validadorCEP->cidade != '') ? $validadorCEP->cidade : $associado['CIDADE']) .
+                    $bairro_cidade_estado = ((isset($validadorCEP->bairro) && $validadorCEP->bairro != '') ? $validadorCEP->bairro : $this->associadoObj->bairro) . ', ' .
+                        ((isset($validadorCEP->cidade) && $validadorCEP->cidade != '') ? $validadorCEP->cidade : $this->associadoObj->cidade) .
                         ' - ' .
-                        ((isset($validadorCEP->estado) && $validadorCEP->estado != '') ? $validadorCEP->estado : $associado['SIGLA']);                        
+                        ((isset($validadorCEP->estado) && $validadorCEP->estado != '') ? $validadorCEP->estado : $this->associadoObj->estado);                        
                 }
                 else {
 
-                    $log_string .= 'ASSOCIADO AINDA COM CADASTRO DE ENDEREÇO ANTIGO!' . PHP_EOL;
-                    $ende = $associado['ENDERECO'] . ' CEP: ' . $cep;
+                    $this->logString .= 'ASSOCIADO AINDA COM CADASTRO DE ENDEREÇO ANTIGO!' . PHP_EOL;
+                    $ende = $this->associadoObj->endereco . ' CEP: ' . $cep;
                 }
 
-                $log_string .= 'Endereco: ' . $ende . PHP_EOL;
+                $this->logString .= 'Endereco: ' . $ende . PHP_EOL;
 
-                $log_string .= (empty($associado['NUMERO'])) ?
+                $this->logString .= (empty($this->associadoObj->numero)) ?
                     'ENDERECO INCOMPLETO! CAMPO NUMERO VAZIO!' . PHP_EOL
-                    : 'NUMERO: ' . $associado['NUMERO'] . PHP_EOL;        
+                    : 'NUMERO: ' . $this->associadoObj->numero . PHP_EOL;        
 
-                $log_string .= (empty($associado['COMPLEMENTO'])) ?
+                $this->logString .= (empty($this->associadoObj->complemento)) ?
                     'ENDERECO INCOMPLETO! CAMPO COMPLEMENTO VAZIO!' . PHP_EOL
                     : 'Complemento: ' . PHP_EOL;  
 
-                $log_string .= (empty($associado['BAIRRO'])) ? 
+                $this->logString .= (empty($this->associadoObj->bairro)) ? 
                     'ENDERECO INCOMPLETO! CAMPO BAIRRO VAZIO!' . PHP_EOL :
-                     'Bairro: ' . $associado['BAIRRO'] . PHP_EOL;
+                     'Bairro: ' . $this->associadoObj->bairro . PHP_EOL;
 
-                $log_string .= (empty($associado['CIDADE'])) ? 
+                $this->logString .= (empty($this->associadoObj->cidade)) ? 
                     'ENDERECO INCOMPLETO! CAMPO CIDADE VAZIO!' . PHP_EOL :
-                     'Cidade: ' . $associado['CIDADE'] . PHP_EOL;
+                     'Cidade: ' . $this->associadoObj->cidade . PHP_EOL;
 
-                $log_string .= (empty($associado['SIGLA'])) ? 
+                $this->logString .= (empty($this->associadoObj->estado)) ? 
                     'ENDERECO INCOMPLETO! CAMPO SIGLA ESTADO VAZIO!' . PHP_EOL :
-                     'Estado: ' . $associado['SIGLA'] . PHP_EOL;             
+                     'Estado: ' . $this->associadoObj->estado . PHP_EOL;             
                 
+                //Montar linha do PDF ou célula da planilha Xlsx (planilha excel) de acordo com o tipo de saída informada em $saidaEm
                 if(is_object($this->fpdf) && (new \ReflectionClass($this->fpdf))->getShortName() == 'FPDF')
-                    $this->__montaEtiquetaFPDF($nome, $cep, $ende, $bairro_cidade_estado);
+                    $this->__montaEtiquetaFPDF($this->associadoObj->nome, $cep, $ende, $bairro_cidade_estado);
                 elseif(is_object($this->planilhaExcel) && (new \ReflectionClass($this->planilhaExcel))->getShortName() == 'Spreadsheet')
-                    $this->__montaCelulasLinhaPlanilha($nome, $cep, $ende, $bairro_cidade_estado);
+                    $this->__montaCelulasLinhaPlanilha($this->associadoObj->nome, $cep, $ende, $bairro_cidade_estado);
 
-                $log_string .= 'Etiqueta gerada.' . PHP_EOL . PHP_EOL;
+                $this->logString .= 'Etiqueta gerada.' . PHP_EOL . PHP_EOL;
             }
 
-            $this->logDepuracao->fwrite($log_string);
+            //Salvar arquivo de log
+            $this->logDepuracao->fwrite($this->logString);
         }
 
+        /**
+         * Método que inicia o objeto que abstrai os aspectos da implementação da saída em .pdf
+         */
         private function __iniciaFPDF() {
 
             $this->fpdf = new FPDF('P','mm','Letter'); // Cria um arquivo novo tipo carta, na vertical.
@@ -167,6 +190,9 @@
             $this->coluna = 0;
         }
 
+        /**
+         * Método que monta a etiqueta do associado para impressão no .pdf
+         */
         private function __montaEtiquetaFPDF($nome, $cep, $endereco, $bairro_cidade_estado = NULL) {
 
             if($this->linha == 10) {
@@ -178,13 +204,13 @@
             if($this->coluna == 2) { // Se for a terceira coluna
 
                 $this->coluna = 0; // $coluna volta para o valor inicial
-                $this->linha = $this->linha +1; // $linha é igual ela mesma +1
+                $this->linha++; // $linha é igual ela mesma +1
             }
             
             if($this->linha == 10) { // Se for a última linha da página
 
                 $this->fpdf->AddPage(); // Adiciona uma nova página
-                $linha = 0; // $linha volta ao seu valor inicial
+                $this->linha = 0; // $linha volta ao seu valor inicial
             }
             
             $posicaoV = $this->linha*$this->aeti;
@@ -226,6 +252,9 @@
             $this->coluna = $this->coluna+1;
         }
 
+        /**
+         * Método que inicia o objeto que abstrai os aspectos da implementação da saída em .xlsx
+         */
         private function __iniciaXlsx() {
 
             $this->planilhaExcel = new Spreadsheet();
@@ -235,6 +264,9 @@
             $this->linha = 0;            
         }
 
+        /**
+         * Método que monta as células da linha do associado na planilha xlsx (excel)
+         */ 
         private function __montaCelulasLinhaPlanilha($nome, $cep, $endereco, $bairro_cidade_estado = '') {
 
             $this->folhaAtivaPlanilha->setCellValue('A' . $this->linha, $nome);

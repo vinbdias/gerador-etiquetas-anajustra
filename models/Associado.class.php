@@ -1,9 +1,13 @@
 <?php 
 
+    /**
+     * Classe modelo de Associado
+     */
     class Associado {
 
         private $id;
         private $nome;
+        private $matricula;
         private $endereco;
         private $numero;
         private $complemento;
@@ -13,25 +17,36 @@
         private $sigla;
         private $cep;
 
+        /**
+         * Método construtor
+         * @param Array $atributos
+         */
         public function __construct($atributos) {
 
             foreach ($atributos as $chave => $valor) {
                 
                 $chave = strtolower($chave);
 
-                if($chave == 'sigla') {
-
-                    $this->estado = $valor;
-                }
-                elseif($chave == 'nome_titular') {
-
-                    $this->nome = trim(str_ireplace(array('pensionista', 'pencionista', '(', ')'), '', $valor));
-                }
+                if($chave == 'sigla')
+                    $this->estado = trim($valor);
+                elseif($chave == 'nome_titular')
+                    $this->nome = trim(str_ireplace(array('pensionista', 'pencionista', '(', ')'), '', $valor));                
                 else 
-                    $this->$chave = $valor;
+                    $this->$chave = trim($valor);
             }
+
+            if(!empty($this->numero)) {
+
+                $this->endereco =  str_replace(array('1', '2', '3', '4', '5', '6', '7', '8', '9', '0'), '', $this->endereco);
+            }
+
         }
 
+        /**
+         * Método que analisa e compara o endereço cadastrado do associado com o retornado a partir da validação do CEP
+         * @param services/ValidadorCEP
+         * @return string
+         */
         public function compararEnderecoCadastradoComValidadoNosCorreios($validadorCEP) {
 
             $string_analise = '';
@@ -64,6 +79,9 @@
             return $string_analise;
         }
 
+        /**
+         * Método "mágico" getter
+         */
         public function __get($name) {
 
             if(isset($this->$name)) {
@@ -80,8 +98,19 @@
             return null;
         }
 
+        /**
+         * Método "mágico" setter
+         */
         public function __set($name, $value) {
 
             $this->$name = $value;
-        }        
+        }       
+
+        /**
+         * Método "mágico" invocado quando as funções isset ou empty são chamadas para uma propriedade do objeto
+         */
+        public function __isset($name){
+
+            return isset($this->$name);
+        } 
     }

@@ -2,8 +2,16 @@
 
     require_once(__ROOT__ . DS . 'dao' . DS . 'AppDAO.class.php');
 
+    /**
+     * Classe DAO que serve de acesso aos dados referentes a associados
+     */
     class AssociadoDAO extends AppDao {
 
+        /**
+         * Método que obtém associados a partir de uma lista de ID's de associados, separados por vírgula
+         * @param string $listaIds
+         * @return array
+         */
         public function obterAssociadosAPartirDeListaDeIDs($listaIds) {
 
             $stringConsultaSql = "SELECT ASS.ID, ASS.MATRICULA, ASS.NOME_TITULAR,  
@@ -31,6 +39,11 @@
             return $this->result['data'];
         }
 
+        /**
+         * Método que obtém os 5 primeiros associados encontrados a partir de uma string que é parte do nome ou CPF
+         * @param string $stringConsulta
+         * @return array
+         */
         public function pesquisaTop5PorNomeOuCpf($stringConsulta) {
 
             $stringConsultaSql = "SELECT TOP(5) ASS.ID, ASS.NOME_TITULAR,ASS.CPF FROM [INTRANET_ANAJUSTRA].[dbo].ASSOCIADOS_COMPLETO ASS 

@@ -2,6 +2,9 @@
 
     use FlyingLuscas\ViaCEP\ZipCode;
     
+    /**
+     * Classe abstrata que abstrai os aspectos e disponibiliza os serviços de FlyingLuscas\ViaCEP\ZipCode
+     */
     abstract class ViaCEPService {
 
         static function validaCEP($cep) {

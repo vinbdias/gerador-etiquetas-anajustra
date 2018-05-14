@@ -1,5 +1,9 @@
 <?php
 
+    //error_reporting(1);
+    //ini_set('display_errors', '1');
+    set_time_limit(0);
+
     require_once('./paths.php');
 
     require_once(__MODELS_PATH__ . 'Associado.class.php');
@@ -19,7 +23,7 @@
 
     if(isset($_REQUEST['ids_associados']) && $_REQUEST['ids_associados'] != '') {                  
 
-        $geradorEtiquetasMain = new GeradorEtiquetasMain('xlsx');
+        $geradorEtiquetasMain = new GeradorEtiquetasMain('pdf');
         $geradorEtiquetasMain->geraEtiquetasNomeCpf($_REQUEST['ids_associados']);
         $geradorEtiquetasMain->saida();        
     }

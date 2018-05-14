@@ -1,7 +1,16 @@
 <?php 
-
+    
+    /**
+     * Classe que auxilia na formatação de strings em uma dada máscara
+     */
     abstract class MascaraHelper {
 
+        /**
+         * Método que formata um dados valor de acordo com uma dada máscara
+         * @param string $valor
+         * @param string $mascara (i.e.: (##) #####-####, ###.###.###-##)
+         * @return string
+         */
         static function formataMascara($valor, $mascara) {
 
             $mascarado = '';

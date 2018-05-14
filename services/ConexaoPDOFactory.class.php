@@ -1,5 +1,8 @@
 <?php 
 
+    /**
+     * Classe que abstrai a criação de uma conexão PDO
+     */
     final class ConexaoPDOFactory {
 
         private static $conexao;
