@@ -1,6 +1,6 @@
 <?php 
 
-    require_once(__ROOT__ . DS . 'dao' . DS . 'AppDAO.class.php');
+    require_once(__DAO_PATH__ . 'AppDAO.class.php');
 
     /**
      * Classe DAO que serve de acesso aos dados referentes a associados
