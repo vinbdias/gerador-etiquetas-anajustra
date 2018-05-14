@@ -1,5 +1,5 @@
 <?php 
-
+        
     class ValidadorCEP {
 
         private $cep;
@@ -19,27 +19,32 @@
             $this->estado = '';
         }
 
-        private function _pesquisarCEP($cep) {        
-            
-            return json_decode(file_get_contents('http://localhost/gerador-etiquetas/validar-cep.php?cep=' . $cep));
+        private function _pesquisarCEP($cep) {  
+
+            $httpProtocol = (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on') ? 'http://' : 'https://'; 
+
+            $pathParts = pathinfo($_SERVER['SCRIPT_FILENAME']);
+            $requestUriArr = explode('?', $_SERVER['REQUEST_URI']);
+            $validaCEPUrl = $httpProtocol . $_SERVER['SERVER_NAME'] . str_replace($pathParts['basename'], '', $requestUriArr[0]) . 'validar-cep.php?cep=' . $cep; 
+
+            return json_decode(file_get_contents($validaCEPUrl));
         }
 
         public function validar($cep) {
 
-            $respostaViaCep = $this->_pesquisarCEP($cep);
+            $respostaViaCep = $this->_pesquisarCEP($cep); 
 
             $this->_armazenaEnderecoTraduzido($respostaViaCep);
         }
 
-        private function _armazenaEnderecoTraduzido($respostaViaCep) {
+        private function _armazenaEnderecoTraduzido($respostaViaCep = array()) {
 
-            $this->cep = $respostaViaCep->zipCode;
-            $this->endereco = $respostaViaCep->street;
-            $this->complemento = $respostaViaCep->complement;
-            $this->bairro = $respostaViaCep->neighborhood;
-            $this->cidade = $respostaViaCep->city;
-            $this->estado = $respostaViaCep->state;          
-
+            $this->cep = (!empty($respostaViaCep->zipCode)) ? $respostaViaCep->zipCode : '';
+            $this->endereco = (!empty($respostaViaCep->street)) ? $respostaViaCep->street : '';
+            $this->complemento = (!empty($respostaViaCep->complement)) ? $respostaViaCep->complement : '';
+            $this->bairro = (!empty($respostaViaCep->neighborhood)) ? $respostaViaCep->neighborhood : '';
+            $this->cidade = (!empty($respostaViaCep->city)) ? $respostaViaCep->city : '';
+            $this->estado = (!empty($respostaViaCep->state)) ? $respostaViaCep->state : '';    
         }
 
         public function __get($name) {

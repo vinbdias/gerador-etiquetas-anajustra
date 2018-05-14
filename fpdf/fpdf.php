@@ -207,7 +207,7 @@ function SetAutoPageBreak($auto, $margin=0)
 	$this->PageBreakTrigger = $this->h-$margin;
 }
 
-function SetDisplayMode($zoom, $layout='default')
+function SetDisplayMode($zoom='default', $layout='default')
 {
 	// Set display mode in viewer
 	if($zoom=='fullpage' || $zoom=='fullwidth' || $zoom=='real' || $zoom=='default' || !is_string($zoom))

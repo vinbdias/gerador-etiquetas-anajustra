@@ -1,8 +1,11 @@
 <?php 
-    require_once(__DIR__.'/vendor/autoload.php');
+    
+    require_once('./paths.php');
+
+    require_once(__VENDOR_PATH__ . 'autoload.php');
     
 
-    require_once('services/ViaCEPService.class.php');
+    require_once(__SERVICES_PATH__ . 'ViaCEPService.class.php');
 
     if(!isset($_REQUEST['cep'])) {
 

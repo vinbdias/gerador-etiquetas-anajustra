@@ -1,0 +1,5 @@
+*.ini
+/vendor/*
+*.txt
+*.pdf
+/arquivos_saida/*

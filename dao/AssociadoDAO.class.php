@@ -6,7 +6,7 @@
 
         public function obterAssociadosAPartirDeListaDeIDs($listaIds) {
 
-            $stringConsultaSql = "SELECT TOP(5) ASS.ID, ASS.MATRICULA, ASS.NOME_TITULAR,  
+            $stringConsultaSql = "SELECT ASS.ID, ASS.MATRICULA, ASS.NOME_TITULAR,  
                        ASS.ENDERECO, ASS.NUMERO, ASS.COMPLEMENTO,
                        ASS.BAIRRO, ASS.CIDADE, EST.SIGLA, ASS.CEP                                
                 FROM [INTRANET_ANAJUSTRA].[dbo].ASSOCIADOS_COMPLETO ASS 
@@ -27,7 +27,30 @@
 
                 throw $e;
             }            
-            
+
             return $this->result['data'];
+        }
+
+        public function pesquisaTop5PorNomeOuCpf($stringConsulta) {
+
+            $stringConsultaSql = "SELECT TOP(5) ASS.ID, ASS.NOME_TITULAR,ASS.CPF FROM [INTRANET_ANAJUSTRA].[dbo].ASSOCIADOS_COMPLETO ASS 
+                    WHERE NOME_TITULAR LIKE '".$stringConsulta."%' OR CPF LIKE '".$stringConsulta."%'";
+
+            try {
+
+                $this->executaConsulta($stringConsultaSql);
+
+                if(!isset($this->result['data']) || !is_array($this->result['data'])) {
+
+                    throw new Exception('Não foi possível obter os associados.');
+                }
+
+            }
+            catch(Exception $e) {
+
+                throw $e;
+            }
+
+            return $this->result['data'];                     
         }
     }

@@ -15,7 +15,9 @@ class ComposerStaticInitd4bbe513f351000493153baa462a6503
     public static $prefixLengthsPsr4 = array (
         'P' => 
         array (
+            'Psr\\SimpleCache\\' => 16,
             'Psr\\Http\\Message\\' => 17,
+            'PhpOffice\\PhpSpreadsheet\\' => 25,
         ),
         'G' => 
         array (
@@ -30,9 +32,17 @@ class ComposerStaticInitd4bbe513f351000493153baa462a6503
     );
 
     public static $prefixDirsPsr4 = array (
+        'Psr\\SimpleCache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/simple-cache/src',
+        ),
         'Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
+        'PhpOffice\\PhpSpreadsheet\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
