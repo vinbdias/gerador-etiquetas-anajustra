@@ -21,7 +21,7 @@
          * @param $arquivo string
          * @return array
          */
-        private static function carregarArquivoDeConfiguracao($arquivo) {
+        private static function __carregarArquivoDeConfiguracao($arquivo) {
 
             if(file_exists($arquivo)) {
 
@@ -39,7 +39,7 @@
         * @param $dados array
         * @return PDO
         */
-        private static function montarStringDeConexao($dados) {
+        private static function __montarStringDeConexao($dados) {
             // capturar dados
             $sgdb     = isset($dados['sgdb']) ? $dados['sgdb'] : NULL;
             $usuario  = isset($dados['usuario']) ? $dados['usuario'] : NULL;
@@ -101,7 +101,7 @@
             if(self::$conexao == NULL) {
 
                // Receber os dados do arquivo
-               self::$conexao = self::montarStringDeConexao(self::carregarArquivoDeConfiguracao($arquivo));
+               self::$conexao = self::__montarStringDeConexao(self::__carregarArquivoDeConfiguracao($arquivo));
                self::$conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                //self::$conexao->setAttribute(PDO::SQLSRV_ATTR_ENCODING, PDO::SQLSRV_ENCODING_UTF8);
                //self::$conexao->exec("set names utf8");
