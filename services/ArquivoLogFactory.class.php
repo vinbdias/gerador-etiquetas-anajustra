@@ -12,6 +12,6 @@
          */
         static function getArquivoLog() {
 
-            return new SplFileObject('arquivos_saida' . DS . DataHoraFactory::getDataHora()->format('Y-m-d_H-i') . '.txt', 'w+');
+            return new SplFileObject('arquivos_saida' . DS . 'logs' . DS . DataHoraFactory::getDataHora()->format('Y-m-d_H-i') . '.txt', 'w+');
         }
     }
