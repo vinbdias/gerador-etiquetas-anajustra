@@ -1,7 +1,23 @@
 <?php 
 
+    require_once(__MODELS_PATH__ . 'Associado.class.php');
+    require_once(__MODELS_PATH__ . 'TmpAssociado.class.php');
+
+    require_once(__VENDOR_PATH__ . 'autoload.php');        
+
+    require_once(__HELPERS_PATH__ . 'MascaraHelper.class.php');
+
+    require_once(__SERVICES_PATH__ . 'ValidadorCEP.class.php');
+    require_once(__SERVICES_PATH__ . 'ArquivoLogFactory.class.php');
+
+    require_once(__DAO_PATH__ . 'AssociadoDAO.class.php');
+    require_once(__DAO_PATH__ . 'TmpAssociadoDAO.class.php');
+
+    require_once(__FPDF_PATH__ . 'fpdf.php');
+
     require_once(__FPDF_PATH__ . 'fpdf.php');
     require_once(__ROOT__ . DS . 'services' . DS . 'DataHoraFactory.class.php');
+
     use PhpOffice\PhpSpreadsheet\Spreadsheet;
     use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -24,9 +40,14 @@
 
         private $logDepuracao = NULL;
         private $logString = '';
+        private $linhaLogString = '';
+
+        private $validadorCEP = NULL; 
 
         private $associadoDAO = NULL;
-        private $associadoObj = NULL;  
+        private $associado = NULL;
+        private $tmpAssociado = NULL;
+        private $tmpAssociadoDAO = NULL;  
 
         private $associados = array();      
 
@@ -51,124 +72,190 @@
 
             $this->associados = $this->associadoDAO->obterAssociadosAPartirDeListaDeIDs($listaIdsAssociados);
 
-            if($this->saidaEm == 'pdf')
-                $this->__iniciaFPDF();            
-            elseif($this->saidaEm == 'xlsx') 
-                $this->__iniciaXlsx(); 
-
             $this->__main();           
         }
 
         /**
+         * Método que implementa a execução da página gera-etiquetas-regiaotrts.php
+         */
+        public function geraEtiquetasRegiao($regiao) {
+
+            $this->associados = $this->associadoDAO->obterAssociadosAPartirDeRegiao($regiao);
+
+            $this->__main();           
+        }        
+
+        /**
          * Método que implementa aspectos comuns a todas as execuções de páginas que geram arquivos para impressão de etiquetas
          */
-        private function __main() {
+        private function __main() { 
 
             //Iniciar o arquivo de log
             $this->logDepuracao = ArquivoLogFactory::getArquivoLog();         
             $this->logString = 'CONSULTA SQL EXECUTADA: ' . $this->associadoDAO->getStringConsultaSql() . PHP_EOL . PHP_EOL;            
 
+            if($this->saidaEm == 'pdf')
+                $this->__iniciaFPDF();            
+            elseif($this->saidaEm == 'xlsx') 
+                $this->__iniciaXlsx();  
+            elseif($this->saidaEm == 'tmp_associados')    
+                $this->__iniciaTmpAssociados();       
+
             //Percorrer pelos associados armazenados
             foreach($this->associados as $key => $associado) {
 
+                $this->linhaLogString = '';
                 //Iniciar classe modelo
-                $this->associadoObj = new Associado($associado);
+                $this->associado = new Associado($associado);               
 
                 //Iniciar log da linha do associado em questão / iteração do loop
-                $this->logString .= 'ASSOCIADO LINHA ' . (string)($key + 1) . PHP_EOL .
-                                'Nome: ' . $this->associadoObj->nome . PHP_EOL .
-                                'Matricula: ' . $this->associadoObj->matricula . PHP_EOL;        
+                $this->linhaLogString .= 'ASSOCIADO LINHA ' . (string)($key + 1) . PHP_EOL .
+                                'Nome: ' . $this->associado->nome . PHP_EOL .
+                                'Matricula: ' . $this->associado->matricula . PHP_EOL;      
 
-                //Se o endereço for vazio, pular linha e não gerar etiqueta para o associado em questão
-                if(empty($this->associadoObj->endereco)) {
+                $cep = MascaraHelper::formataMascara($this->associado->cep, '#####-###');        
+                $this->validadorCEP = new ValidadorCEP();                                  
 
-                    $this->logString .= 'ETIQUETA NAO GERADA! CAMPO ENDERECO VAZIO!' . PHP_EOL . PHP_EOL;
+                if(!$this->__validarSeDeveContinuarComAssociado($cep))
                     continue;
-                }         
 
-                $cep = MascaraHelper::formataMascara($this->associadoObj->cep, '#####-###');        
-                $validadorCEP = new ValidadorCEP();
+                $bairroCidadeEstadoString = NULL;
 
-                //Se o CEP for vazio, pular linha e não gerar etiqueta para o associado em questão                
-                if(empty($cep)) {
-                    
-                    $this->logString .= 'ETIQUETA NAO GERADA! CAMPO CEP VAZIO!' . PHP_EOL . PHP_EOL;            
-                    continue;
-                }
+                $enderecoString = '';
+                $this->__tratamentosEAnalisesEmFuncaoDoCep($enderecoString, $bairroCidadeEstadoString, $cep);
+           
+                $this->__consideracoesFinais($enderecoString);
 
-                $validadorCEP->validar($cep);
-                
-                //Se o CEP não for válido, pular linha e não gerar etiqueta para o associado em questão
-                if(!empty($validadorCEP->cep)) {
-                    
-                    $this->logString .= 'CEP validado nos Correios (https://viacep.com.br/)' . PHP_EOL;
-                }
-                else {
-                    
-                    $this->logString .= 'ETIQUETA NAO GERADA! CEP ' . $cep . ' NAO FOI VALIDADO NOS CORREIOS (https://viacep.com.br/ws/' . $cep . '/json/)' . PHP_EOL . PHP_EOL;
-                    continue;
-                }           
+                $this->__montaConteudoSaida($cep, $enderecoString, $bairroCidadeEstadoString);
 
-                $bairro_cidade_estado = NULL;
-
-                //Caso o campo bairro esteja preenchido, assumir que o associado passou por recadastramento de endereço
-                if(isset($this->associadoObj->bairro) && $this->associadoObj->bairro != '') {
-
-                    $this->logString .= 'Associado com cadastro na tabela funcional.' . PHP_EOL;
-
-                    $this->logString .= 'INICIANDO análise/comparação do endereço cadastrado com o obtido a partir do CEP nos Correios' . PHP_EOL;
-                    $analise_comparacao = $this->associadoObj->compararEnderecoCadastradoComValidadoNosCorreios($validadorCEP);
-                    $this->logString .= $analise_comparacao;
-                    $this->logString .= 'Análise/comparação FINALIZADA' . PHP_EOL;
-
-                    $ende = ((isset($validadorCEP->endereco) && $validadorCEP->endereco != '') ? $validadorCEP->endereco : $this->associadoObj->endereco) . ' ' .
-                        $this->associadoObj->numero . ' ' .
-                        $validadorCEP->complemento;
-
-                    $bairro_cidade_estado = ((isset($validadorCEP->bairro) && $validadorCEP->bairro != '') ? $validadorCEP->bairro : $this->associadoObj->bairro) . ', ' .
-                        ((isset($validadorCEP->cidade) && $validadorCEP->cidade != '') ? $validadorCEP->cidade : $this->associadoObj->cidade) .
-                        ' - ' .
-                        ((isset($validadorCEP->estado) && $validadorCEP->estado != '') ? $validadorCEP->estado : $this->associadoObj->estado);                        
-                }
-                else {
-
-                    $this->logString .= 'ASSOCIADO AINDA COM CADASTRO DE ENDEREÇO ANTIGO!' . PHP_EOL;
-                    $ende = $this->associadoObj->endereco . ' CEP: ' . $cep;
-                }
-
-                $this->logString .= 'Endereco: ' . $ende . PHP_EOL;
-
-                $this->logString .= (empty($this->associadoObj->numero)) ?
-                    'ENDERECO INCOMPLETO! CAMPO NUMERO VAZIO!' . PHP_EOL
-                    : 'NUMERO: ' . $this->associadoObj->numero . PHP_EOL;        
-
-                $this->logString .= (empty($this->associadoObj->complemento)) ?
-                    'ENDERECO INCOMPLETO! CAMPO COMPLEMENTO VAZIO!' . PHP_EOL
-                    : 'Complemento: ' . PHP_EOL;  
-
-                $this->logString .= (empty($this->associadoObj->bairro)) ? 
-                    'ENDERECO INCOMPLETO! CAMPO BAIRRO VAZIO!' . PHP_EOL :
-                     'Bairro: ' . $this->associadoObj->bairro . PHP_EOL;
-
-                $this->logString .= (empty($this->associadoObj->cidade)) ? 
-                    'ENDERECO INCOMPLETO! CAMPO CIDADE VAZIO!' . PHP_EOL :
-                     'Cidade: ' . $this->associadoObj->cidade . PHP_EOL;
-
-                $this->logString .= (empty($this->associadoObj->estado)) ? 
-                    'ENDERECO INCOMPLETO! CAMPO SIGLA ESTADO VAZIO!' . PHP_EOL :
-                     'Estado: ' . $this->associadoObj->estado . PHP_EOL;             
-                
-                //Montar linha do PDF ou célula da planilha Xlsx (planilha excel) de acordo com o tipo de saída informada em $saidaEm
-                if(is_object($this->fpdf) && (new \ReflectionClass($this->fpdf))->getShortName() == 'FPDF')
-                    $this->__montaEtiquetaFPDF($this->associadoObj->nome, $cep, $ende, $bairro_cidade_estado);
-                elseif(is_object($this->planilhaExcel) && (new \ReflectionClass($this->planilhaExcel))->getShortName() == 'Spreadsheet')
-                    $this->__montaCelulasLinhaPlanilha($this->associadoObj->nome, $cep, $ende, $bairro_cidade_estado);
-
-                $this->logString .= 'Etiqueta gerada.' . PHP_EOL . PHP_EOL;
+                $this->logString .= $this->linhaLogString;                
             }
 
             //Salvar arquivo de log
-            $this->logDepuracao->fwrite($this->logString);
+            $this->logDepuracao->fwrite($this->linhaLogString);
+        }
+
+        /**
+         * Método que verifica se deve dar prosseguimento à geração de etiqueta do associado, ou já pode ser desconsiderado
+         * @param string $cep
+         * @return boolean
+         */
+        private function __validarSeDeveContinuarComAssociado($cep) {
+
+            //Se o endereço for vazio, pular linha e não gerar etiqueta para o associado em questão
+            if(empty($this->associado->endereco)) {
+
+                $this->linhaLogString .= 'ENDERECO INADEQUADO PARA GERAR ETIQUETA! CAMPO ENDERECO VAZIO!' . PHP_EOL . PHP_EOL;
+                return false;
+            }              
+
+            //Se o CEP for vazio, pular linha e não gerar etiqueta para o associado em questão                
+            if(empty($cep)) {
+                
+                $this->linhaLogString .= 'ENDERECO INADEQUADO PARA GERAR ETIQUETA! CAMPO CEP VAZIO!' . PHP_EOL . PHP_EOL;            
+                return false;
+            }
+
+            $this->validadorCEP->validar($cep);
+            
+            //Se o CEP não for válido, pular linha e não gerar etiqueta para o associado em questão
+            if(!empty($this->validadorCEP->cep)) {
+                
+                $this->linhaLogString .= 'CEP validado nos Correios (https://viacep.com.br/)' . PHP_EOL;
+            }
+            else {
+                
+                $this->linhaLogString .= 'ENDERECO INADEQUADO PARA GERAR ETIQUETA! CEP ' . $cep . ' NAO FOI VALIDADO NOS CORREIOS (https://viacep.com.br/ws/' . $cep . '/json/)' . PHP_EOL . PHP_EOL;
+                return false;
+            }      
+
+            return true;        
+        }
+
+        /**
+         * Método que faz tratamentos e análises a serem executados no fluxo de __main
+         * @param string $enderecoString
+         * @param string $bairroCidadeEstadoString
+         * @param string $cep
+         */
+        private function __tratamentosEAnalisesEmFuncaoDoCep(&$enderecoString, &$bairroCidadeEstadoString, $cep) {
+
+            //Caso o campo bairro esteja preenchido, assumir que o associado passou por recadastramento de endereço
+            if(isset($this->associado->bairro) && $this->associado->bairro != '') {
+
+                $this->linhaLogString .= 'Associado com cadastro na tabela funcional.' . PHP_EOL;
+
+                $this->linhaLogString .= 'INICIANDO análise/comparação do endereço cadastrado com o obtido a partir do CEP nos Correios' . PHP_EOL;
+                $this->linhaLogString .= $this->associado->compararEnderecoCadastradoComValidadoNosCorreios($this->validadorCEP);                    
+                $this->linhaLogString .= 'Análise/comparação FINALIZADA' . PHP_EOL;
+
+                $enderecoString = ((isset($this->validadorCEP->endereco) && $this->validadorCEP->endereco != '') ? $this->validadorCEP->endereco : $this->associado->endereco) . ' ' .
+                    $this->associado->numero . ' ' .
+                    $this->validadorCEP->complemento;
+
+                $bairroCidadeEstadoString = ((isset($this->validadorCEP->bairro) && $this->validadorCEP->bairro != '') ? $this->validadorCEP->bairro : $this->associado->bairro) . ', ' .
+                    ((isset($this->validadorCEP->cidade) && $this->validadorCEP->cidade != '') ? $this->validadorCEP->cidade : $this->associado->cidade) .
+                    ' - ' .
+                    ((isset($this->validadorCEP->estado) && $this->validadorCEP->estado != '') ? $this->validadorCEP->estado : $this->associado->estado);                        
+            }
+            else {
+
+                $this->linhaLogString .= 'ASSOCIADO AINDA COM CADASTRO DE ENDEREÇO ANTIGO!' . PHP_EOL;
+                $enderecoString = $this->associado->endereco . ' CEP: ' . $cep;
+            }            
+        }
+
+
+        /**
+         * Método responsável por adicionar ao log as considerações finais acerca do cadastro de endereço do associado
+         * @param string $enderecoString
+         */
+        private function __consideracoesFinais($enderecoString) {
+
+                $this->linhaLogString .= 'Endereco: ' . $enderecoString . PHP_EOL;
+
+                $this->linhaLogString .= (empty($this->associado->numero)) ?
+                    'ENDERECO INCOMPLETO! CAMPO NUMERO VAZIO!' . PHP_EOL
+                    : 'NUMERO: ' . $this->associado->numero . PHP_EOL;        
+
+                $this->linhaLogString .= (empty($this->associado->complemento)) ?
+                    'ENDERECO INCOMPLETO! CAMPO COMPLEMENTO VAZIO!' . PHP_EOL
+                    : 'Complemento: ' . PHP_EOL;  
+
+                $this->linhaLogString .= (empty($this->associado->bairro)) ? 
+                    'ENDERECO INCOMPLETO! CAMPO BAIRRO VAZIO!' . PHP_EOL :
+                     'Bairro: ' . $this->associado->bairro . PHP_EOL;
+
+                $this->linhaLogString .= (empty($this->associado->cidade)) ? 
+                    'ENDERECO INCOMPLETO! CAMPO CIDADE VAZIO!' . PHP_EOL :
+                     'Cidade: ' . $this->associado->cidade . PHP_EOL;
+
+                $this->linhaLogString .= (empty($this->associado->estado)) ? 
+                    'ENDERECO INCOMPLETO! CAMPO SIGLA ESTADO VAZIO!' . PHP_EOL :
+                     'Estado: ' . $this->associado->estado . PHP_EOL;              
+        }
+
+        /**
+         * Método responsável por verificar o tipo de saída e chamar a função respectiva para tal
+         * @param string $cep
+         * @param string $enderecoString
+         * @param string $bairroCidadeEstadoString
+         */
+        private function __montaConteudoSaida($cep, $enderecoString, $bairroCidadeEstadoString) {
+
+            //Montar linha do PDF ou célula da planilha Xlsx (planilha excel) de acordo com o tipo de saída informada em $saidaEm
+            if(is_object($this->fpdf) && (new \ReflectionClass($this->fpdf))->getShortName() == 'FPDF')
+                $this->__montaEtiquetaFPDF($this->associado->nome, $cep, $enderecoString, $bairroCidadeEstadoString);
+            elseif(is_object($this->planilhaExcel) && (new \ReflectionClass($this->planilhaExcel))->getShortName() == 'Spreadsheet')
+                $this->__montaCelulasLinhaPlanilha($this->associado->nome, $cep, $enderecoString, $bairroCidadeEstadoString);
+
+            $this->linhaLogString .= 'Etiqueta gerada.' . PHP_EOL . PHP_EOL;
+        }
+
+        private function __iniciaTmpAssociados() {
+
+            $this->tmpAssociadoDAO = new TmpAssociadoDAO();
+            $this->tmpAssociadoDAO->limpaTabela();
         }
 
         /**
@@ -193,7 +280,7 @@
         /**
          * Método que monta a etiqueta do associado para impressão no .pdf
          */
-        private function __montaEtiquetaFPDF($nome, $cep, $endereco, $bairro_cidade_estado = NULL) {
+        private function __montaEtiquetaFPDF($nome, $cep, $enderecoString, $bairroCidadeEstadoString = NULL) {
 
             if($this->linha == 10) {
 
@@ -236,11 +323,11 @@
             
             $this->fpdf->Text($somaH,$somaV,Encoding::toWin1252($nome)); // Imprime o nome da pessoa de acordo com as coordenadas
 
-            $this->fpdf->Text($somaH,$somaV+4,Encoding::toWin1252($endereco)); // Imprime o endereço da pessoa de acordo com as coordenadas
+            $this->fpdf->Text($somaH,$somaV+4,Encoding::toWin1252($enderecoString)); // Imprime o endereço da pessoa de acordo com as coordenadas
 
-            if(isset($bairro_cidade_estado) && $bairro_cidade_estado != '') {
+            if(isset($bairroCidadeEstadoString) && $bairroCidadeEstadoString != '') {
 
-                $this->fpdf->Text($somaH,$somaV+8,Encoding::toWin1252($bairro_cidade_estado)); // Imprime o cep da pessoa de acordo com as coordenadas
+                $this->fpdf->Text($somaH,$somaV+8,Encoding::toWin1252($bairroCidadeEstadoString)); // Imprime o cep da pessoa de acordo com as bairroCidadeEstadoString
                 $cep_y_pos = $somaV+12;                
             }
             else {
@@ -267,10 +354,10 @@
         /**
          * Método que monta as células da linha do associado na planilha xlsx (excel)
          */ 
-        private function __montaCelulasLinhaPlanilha($nome, $cep, $endereco, $bairro_cidade_estado = '') {
+        private function __montaCelulasLinhaPlanilha($nome, $cep, $enderecoString, $bairroCidadeEstadoString = '') {
 
             $this->folhaAtivaPlanilha->setCellValue('A' . $this->linha, $nome);
-            $this->folhaAtivaPlanilha->setCellValue('B' . $this->linha, $endereco . ' ' . $bairro_cidade_estado);
+            $this->folhaAtivaPlanilha->setCellValue('B' . $this->linha, $enderecoString . ' ' . $bairroCidadeEstadoString);
             $this->folhaAtivaPlanilha->setCellValue('C' . $this->linha, $cep);
             $this->linha++;
         }        

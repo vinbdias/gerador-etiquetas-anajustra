@@ -15,11 +15,11 @@
         public function obterAssociadosAPartirDeListaDeIDs($listaIds) {
 
             $stringConsultaSql = "SELECT ASS.ID, ASS.MATRICULA, ASS.NOME_TITULAR,  
-                       ASS.ENDERECO, ASS.NUMERO, ASS.COMPLEMENTO,
-                       ASS.BAIRRO, ASS.CIDADE, EST.SIGLA, ASS.CEP                                
-                FROM [INTRANET_ANAJUSTRA].[dbo].ASSOCIADOS_COMPLETO ASS 
-                INNER JOIN INTRANET_ANAJUSTRA.[dbo].cd_estado EST ON ASS.CD_UF = EST.ID_ESTADO 
-                WHERE ASS.ID IN (".$_REQUEST['ids_associados'].")"; 
+                                         ASS.ENDERECO, ASS.NUMERO, ASS.COMPLEMENTO,
+                                         ASS.BAIRRO, ASS.CIDADE, EST.SIGLA, ASS.CEP                                
+                                  FROM [INTRANET_ANAJUSTRA].[dbo].ASSOCIADOS_COMPLETO ASS 
+                                  INNER JOIN INTRANET_ANAJUSTRA.[dbo].cd_estado EST ON ASS.CD_UF = EST.ID_ESTADO 
+                                  WHERE ASS.ID IN (".$_REQUEST['ids_associados'].")"; 
 
             try {
 
@@ -66,4 +66,37 @@
 
             return $this->result['data'];                     
         }
+
+        /**
+         * Método que obtém os associados de uma dada região
+         * @param int $regiaoID
+         * @return array
+         */
+        public function obterAssociadosAPartirDeRegiao($regiaoID) {
+
+            $stringConsultaSql = "SELECT ASS.ID, ASS.MATRICULA, ASS.NOME_TITULAR,  
+                                         ASS.ENDERECO, ASS.NUMERO, ASS.COMPLEMENTO,
+                                         ASS.BAIRRO, ASS.CIDADE, EST.SIGLA, ASS.CEP                                
+                                  FROM [INTRANET_ANAJUSTRA].[dbo].ASSOCIADOS_COMPLETO ASS 
+                                  INNER JOIN INTRANET_ANAJUSTRA.[dbo].cd_estado EST ON ASS.CD_UF = EST.ID_ESTADO 
+                                  WHERE ASS.CD_LOTACAO = " . $regiaoID;
+
+            try {
+
+                $this->executaConsulta($stringConsultaSql);
+
+                if(!isset($this->result['data']) || !is_array($this->result['data'])) {
+
+                    throw new Exception('Não foi possível obter os associados.');
+                }
+
+            }
+            catch(Exception $e) {
+
+                throw $e;
+            }                                  
+
+            return $this->result['data'];
+        }
+
     }

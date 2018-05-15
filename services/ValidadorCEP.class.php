@@ -10,7 +10,7 @@
         private $complemento;
         private $bairro;
         private $cidade;
-        private $estado;
+        private $estado;        
 
         /**
          * Método construtor

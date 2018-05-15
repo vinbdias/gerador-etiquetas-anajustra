@@ -126,27 +126,7 @@
                     <input type="hidden" name="ids_associados" id="ids-associados" value="" />
                 </form>
             </div>
-            
-            
-            
-          </div>     
-          
-         <!--  <div class="panel panel-primary col-md-12">
-            <div class="panel-body">
-              <h4 class="text-on-pannel text-primary"><strong class="text-uppercase">Gerar etiquetas por região </strong></h4>
-                <form action="gera-etiquetas-regiao.php" method="get">
-                    <div class="form-group">
-                        <label>Pesquisar região:</label><br/>
-                        <input type="text" name="regiao" placeholder="EX: TRT 01..." class="busca-regiao regiao-input form-control tm-input-info" value="" autocomplete="off"/>
-                    </div>
-                    <div class="form-group pull-right">
-                        <button class="btn btn-primary" formtarget="_blank">GERAR ETIQUETAS</button>
-                    </div>
-                </form>
-            </div>
-          </div>  -->
-          
-            
+          </div>                 
       </div>
       <p align="center">
         <button onclick="geradorEtiquetasController.gerarEtiquetas(event)" id="gerar-etiquetas" class="btn btn-primary" formtarget="_blank" style="margin-top: 50px;">GERAR ETIQUETAS</button> 
