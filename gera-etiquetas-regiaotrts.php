@@ -22,7 +22,7 @@
 
     if(isset($regiaoID) && $regiaoID > 0) {
 
-        $geradorEtiquetasMain = new GeradorEtiquetasMain(array('xlsx'), true);
+        $geradorEtiquetasMain = new GeradorEtiquetasMain(array('xlsx', 'xlsxNaoOks'), true);
         $geradorEtiquetasMain->geraEtiquetasRegiao((int) $regiaoID);
         echo json_encode($geradorEtiquetasMain->saida());        
     }

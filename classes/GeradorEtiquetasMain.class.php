@@ -71,8 +71,8 @@
 
         private $saidaEm = array('pdf');
 
-        private $testeMockup = false;
-        private $limiteConsultaAssociadosTesteMockup = 50;
+        private $pularValidacaoViaCep = false;
+        private $limiteConsultaAssociadospularValidacaoViaCep = 50;
 
         private $geraArquivoEnvio = false;
 
@@ -82,11 +82,11 @@
          * Método construtor
          * @param array $saidaEm
          */
-        public function __construct($saidaEm = array('pdf'), $testeMockup = false, $salvarArquivoLog = false) {
+        public function __construct($saidaEm = array('pdf'), $pularValidacaoViaCep = false, $salvarArquivoLog = false) {
         
             $this->saidaEm = $saidaEm;
 
-            $this->testeMockup = $testeMockup;
+            $this->pularValidacaoViaCep = $pularValidacaoViaCep;
 
             $this->salvarArquivoLog = $salvarArquivoLog;
 
@@ -109,7 +109,7 @@
          */
         public function geraEtiquetasRegiao($regiao) {
             
-            $this->associados = $this->associadoDAO->obterAssociadosAPartirDeRegiao($regiao, $this->limiteConsultaAssociadosTesteMockup);
+            $this->associados = $this->associadoDAO->obterAssociadosAPartirDeRegiao($regiao, $this->limiteConsultaAssociadospularValidacaoViaCep);
 
             $this->nomeRegiao = (new RegiaoDAO())->obterNomeRegiao($regiao);
             $this->nomePastaRegiao = StringHelper::formataParaNomeDeArquivo($this->nomeRegiao);        
@@ -160,19 +160,16 @@
                 $this->validadorCEP = new ValidadorCEP();    
 
 
+                $enderecoString = '';
+                $bairroCidadeEstadoString = '';
 
                 if(!$this->__validarSeDeveContinuarComAssociado($cep)) {
 
-                    if(isset($this->planilhaAnaliseRegiaoNaoOks)) {
-
-                        $this->__gravaNaoOk();
-                    }                    
+                    if($this->__issetPlanilhaAnaliseRegiaoNaoOks())
+                        $this->__gravaNaoOk();                 
                 }
-                else {
+                else {                
 
-                    $bairroCidadeEstadoString = NULL;
-
-                    $enderecoString = '';
                     $this->__tratamentosEAnalisesEmFuncaoDoCep($enderecoString, $bairroCidadeEstadoString, $cep);
                
                     $this->__consideracoesFinais($enderecoString);
@@ -214,7 +211,7 @@
          */
         private function __gravaNaoOk() {
 
-            $this->tmpAssociadoNaoOk = new TmpAssociado($this->associado, $this->validadorCEP, $this->linhaLogString);        
+            $this->tmpAssociadoNaoOk = new TmpAssociado($this->associado, $this->validadorCEP, $this->linhaLogString);       
         }
 
         /**
@@ -238,11 +235,11 @@
                 return false;
             }
 
-            if(!$this->testeMockup)
+            if(!$this->pularValidacaoViaCep)
                 $this->validadorCEP->validar($cep);
             
             //Se o CEP não for válido, pular linha e não gerar etiqueta para o associado em questão
-            if(!empty($this->validadorCEP->cep) || $this->testeMockup) {
+            if(!empty($this->validadorCEP->cep) || $this->pularValidacaoViaCep) {
                 
                 $this->linhaLogString .= 'CEP validado nos Correios (https://viacep.com.br/)' . PHP_EOL;
             }
@@ -334,10 +331,10 @@
                 if($this->__issetPlanilhaExcel())
                     $this->__montaCelulasLinhaPlanilha($this->associado->nome, $cep, $enderecoString, $bairroCidadeEstadoString);
                 
-                if($this->__issetPlanilhaAnaliseRegiaoOks())
+                if($this->__issetPlanilhaAnaliseRegiaoOks() && $this->__issetTmpAssociadoOk())
                     $this->__montaCelulasLinhaplanilhaAnaliseRegiaoOks();
 
-                if($this->__issetPlanilhaAnaliseRegiaoNaoOks())
+                if($this->__issetPlanilhaAnaliseRegiaoNaoOks() && $this->__issetTmpAssociadoNaoOk())
                     $this->__montaCelulasLinhaplanilhaAnaliseRegiaoNaoOks();  
             }          
         }
@@ -527,9 +524,9 @@
          */
         private function __montaCelulasLinhaplanilhaAnaliseRegiao() {
 
-            if(isset($this->tmpAssociadoOk))
+            if($this->__issetTmpAssociadoOk())
                 $this->__montaCelulasLinhaplanilhaAnaliseRegiaoOks();
-            elseif(isset($this->tmpAssociadoNaoOk))
+            elseif($this->__issetTmpAssociadoNaoOk())
                 $this->__montaCelulasLinhaplanilhaAnaliseRegiaoNaoOks();
         }
 
@@ -642,7 +639,8 @@
          */
         private function __issetFpdf() {
 
-            if(is_object($this->fpdf) && (new \ReflectionClass($this->fpdf))->getShortName() == 'FPDF')
+            if(isset($this->fpdf) && is_object($this->fpdf) &&
+             (new \ReflectionClass($this->fpdf))->getShortName() == 'FPDF')
                 return true;
 
             return false;
@@ -654,7 +652,8 @@
          */
         private function __issetPlanilhaExcel() {
 
-            if(is_object($this->planilhaExcel) && (new \ReflectionClass($this->planilhaExcel))->getShortName() == 'Spreadsheet')
+            if(isset($this->planilhaExcel) && is_object($this->planilhaExcel) &&
+             (new \ReflectionClass($this->planilhaExcel))->getShortName() == 'Spreadsheet')
                 return true;
 
             return false;
@@ -666,7 +665,8 @@
          */
         private function __issetPlanilhaAnaliseRegiaoOks() {
 
-            if(is_object($this->planilhaAnaliseRegiaoOks) && (new \ReflectionClass($this->planilhaAnaliseRegiaoOks))->getShortName() == 'Spreadsheet')
+            if(isset($this->planilhaAnaliseRegiaoOks) && is_object($this->planilhaAnaliseRegiaoOks) &&
+             (new \ReflectionClass($this->planilhaAnaliseRegiaoOks))->getShortName() == 'Spreadsheet')
                 return true;
 
             return false;
@@ -678,9 +678,37 @@
          */
         private function __issetPlanilhaAnaliseRegiaoNaoOks() {
 
-                if(is_object($this->planilhaAnaliseRegiaoNaoOks) && (new \ReflectionClass($this->planilhaAnaliseRegiaoNaoOks))->getShortName() == 'Spreadsheet')
+                if(isset($this->planilhaAnaliseRegiaoNaoOks) && is_object($this->planilhaAnaliseRegiaoNaoOks) &&
+                 (new \ReflectionClass($this->planilhaAnaliseRegiaoNaoOks))->getShortName() == 'Spreadsheet')
                     return true;
 
                 return false;
+        }
+
+        private function __issetTmpAssociado() {
+
+            if(isset($this->tmpAssociado) && is_object($this->tmpAssociado) &&
+             (new \ReflectionClass($this->tmpAssociado))->getShortName() == 'tmpAssociado')            
+                return true;
+
+            return false;
+        }
+
+        private function __issetTmpAssociadoOk() {
+
+            if(isset($this->tmpAssociadoOk) && is_object($this->tmpAssociadoOk) &&
+             (new \ReflectionClass($this->tmpAssociadoOk))->getShortName() == 'tmpAssociado')
+                return true;
+
+            return false;
+        }
+
+        private function __issetTmpAssociadoNaoOk() {
+
+            if(isset($this->tmpAssociadoNaoOk) && is_object($this->tmpAssociadoNaoOk) &&
+             (new \ReflectionClass($this->tmpAssociadoNaoOk))->getShortName() == 'tmpAssociado')
+                return true;
+
+            return false;            
         }
     }
