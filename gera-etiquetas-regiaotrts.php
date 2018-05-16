@@ -18,11 +18,12 @@
 
     if(isset($regiaoID) && $regiaoID > 0) {
 
-        $geradorEtiquetasMain = new GeradorEtiquetasMain('tmp_associados');
+        $geradorEtiquetasMain = new GeradorEtiquetasMain('analiseRegiaoXlsx');
         $geradorEtiquetasMain->geraEtiquetasRegiao((int) $regiaoID);
-        //$geradorEtiquetasMain->saida();     
+        $geradorEtiquetasMain->saida(); 
+        echo json_encode(array('resposta' => true));    
     }
     else {
 
-        echo json_encode(array('resposta' => 'Região não foi informada. Não foi possível gerar as etiquetas para a região.'));
+        echo json_encode(array('resposta' => false));
     }

@@ -46,7 +46,7 @@
          */
         public function pesquisaTop5PorNomeOuCpf($stringConsulta) {
 
-            $stringConsultaSql = "SELECT TOP(5) ASS.ID, ASS.NOME_TITULAR,ASS.CPF FROM [INTRANET_ANAJUSTRA].[dbo].ASSOCIADOS_COMPLETO ASS 
+            $stringConsultaSql = "SELECT TOP(10) ASS.ID, ASS.NOME_TITULAR,ASS.CPF FROM [INTRANET_ANAJUSTRA].[dbo].ASSOCIADOS_COMPLETO ASS 
                     WHERE NOME_TITULAR LIKE '".$stringConsulta."%' OR CPF LIKE '".$stringConsulta."%'";
 
             try {
@@ -74,7 +74,7 @@
          */
         public function obterAssociadosAPartirDeRegiao($regiaoID) {
 
-            $stringConsultaSql = "SELECT ASS.ID, ASS.MATRICULA, ASS.NOME_TITULAR,  
+            $stringConsultaSql = "SELECT TOP (50) ASS.ID, ASS.MATRICULA, ASS.NOME_TITULAR,  
                                          ASS.ENDERECO, ASS.NUMERO, ASS.COMPLEMENTO,
                                          ASS.BAIRRO, ASS.CIDADE, EST.SIGLA, ASS.CEP                                
                                   FROM [INTRANET_ANAJUSTRA].[dbo].ASSOCIADOS_COMPLETO ASS 

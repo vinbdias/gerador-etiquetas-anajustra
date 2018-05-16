@@ -8,7 +8,7 @@
     $regioes = array();
     foreach($resultadoRegioes as $regiao) {
 
-        $regioes[] = array('id' => $regiao['ID'], 'lotacao' => $regiao['LOTACAO']);
+        $regioes[] = array('id' => $regiao['ID_LOTACAO'], 'lotacao' => $regiao['LOTACAO']);
     }
 
     echo json_encode($regioes);

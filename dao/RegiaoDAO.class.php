@@ -9,7 +9,6 @@
 
         /**
          * Método que obtém as regiões dos TRTs
-         * @param string $stringConsulta
          * @return array
          */
         public function obterRegioes() {
@@ -33,4 +32,31 @@
 
             return $this->result['data'];                     
         }
+
+        /**
+         * Método que obtém nome de uma dada região / lotação
+         * @param string $stringConsulta
+         * @return string
+         */
+        public function obterNomeRegiao($regiaoID) {
+
+            $stringConsultaSql = "SELECT LOTACAO, rowguid FROM cd_lotacao WHERE ID_LOTACAO = " . $regiaoID;
+
+            try {
+
+                $this->executaConsulta($stringConsultaSql);
+
+                if(!isset($this->result['data']) || !is_array($this->result['data'])) {
+
+                    throw new Exception('Não foi possível obter as regiões.');
+                }
+
+            }
+            catch(Exception $e) {
+
+                throw $e;
+            }
+
+            return (isset($this->result['data'][0]['LOTACAO'])) ? $this->result['data'][0]['LOTACAO'] : '';                     
+        }        
     }

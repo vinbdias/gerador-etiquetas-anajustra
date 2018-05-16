@@ -4,14 +4,15 @@
     require_once(__MODELS_PATH__ . 'TmpAssociado.class.php');
 
     require_once(__VENDOR_PATH__ . 'autoload.php');        
-
-    require_once(__HELPERS_PATH__ . 'MascaraHelper.class.php');
+    
+    require_once(__HELPERS_PATH__ . 'StringHelper.class.php');
 
     require_once(__SERVICES_PATH__ . 'ValidadorCEP.class.php');
     require_once(__SERVICES_PATH__ . 'ArquivoLogFactory.class.php');
 
     require_once(__DAO_PATH__ . 'AssociadoDAO.class.php');
     require_once(__DAO_PATH__ . 'TmpAssociadoDAO.class.php');
+    require_once(__DAO_PATH__ . 'RegiaoDAO.class.php');
 
     require_once(__FPDF_PATH__ . 'fpdf.php');
 
@@ -29,18 +30,28 @@
     class GeradorEtiquetasMain {
 
         private $fpdf = NULL;
-        private $mesq = 7;
-        private $mdir = 8;
-        private $msup = 22;
-        private $leti = 107;
-        private $aeti = 25.4;
-        private $ehet = 100;
+        private $mesq;
+        private $mdir;
+        private $msup;
+        private $leti;
+        private $aeti;
+        private $ehet;
 
-        private $planilhaExcel;
+        private $planilhaExcel = NULL;
+        private $planilhaAnaliseRegiaoOks = NULL;
+        private $planilhaAnaliseRegiaoNaoOks = NULL;
 
         private $logDepuracao = NULL;
         private $logString = '';
         private $linhaLogString = '';
+
+        private $linhaPdf = 0;
+        private $colunaPdf = 0;
+
+        private $linhaXlsx = 0;
+
+        private $linhaXlsxOks;
+        private $linhaXlsxNaoOks = 0;
 
         private $validadorCEP = NULL; 
 
@@ -49,7 +60,10 @@
         private $tmpAssociado = NULL;
         private $tmpAssociadoDAO = NULL;  
 
-        private $associados = array();      
+        private $associados = array();
+
+        private $regiaoDAO = NULL;  
+        private $nomeRegiao = '';    
 
         private $saidaEm = 'pdf';
 
@@ -82,6 +96,9 @@
 
             $this->associados = $this->associadoDAO->obterAssociadosAPartirDeRegiao($regiao);
 
+            $this->nomeRegiao = (new RegiaoDAO())->obterNomeRegiao($regiao);
+            $this->nomePastaRegiao = StringHelper::formataParaNomeDeArquivo($this->nomeRegiao);        
+
             $this->__main();           
         }        
 
@@ -90,49 +107,96 @@
          */
         private function __main() { 
 
-            //Iniciar o arquivo de log
-            $this->logDepuracao = ArquivoLogFactory::getArquivoLog();         
-            $this->logString = 'CONSULTA SQL EXECUTADA: ' . $this->associadoDAO->getStringConsultaSql() . PHP_EOL . PHP_EOL;            
-
             if($this->saidaEm == 'pdf')
                 $this->__iniciaFPDF();            
             elseif($this->saidaEm == 'xlsx') 
                 $this->__iniciaXlsx();  
-            elseif($this->saidaEm == 'tmp_associados')    
-                $this->__iniciaTmpAssociados();       
+            elseif($this->saidaEm == 'analiseRegiaoXlsx')    
+                $this->__iniciaAnaliseRegiaoXlsx();             
+
+            //Iniciar o arquivo de log
+            if(!isset($this->planilhaAnaliseRegiaoOks)) {
+
+                $this->logDepuracao = ArquivoLogFactory::getArquivoLog();         
+                $this->logString = 'CONSULTA SQL EXECUTADA: ' . $this->associadoDAO->getStringConsultaSql() . PHP_EOL . PHP_EOL;             
+            }
+            
 
             //Percorrer pelos associados armazenados
             foreach($this->associados as $key => $associado) {
 
                 $this->linhaLogString = '';
                 //Iniciar classe modelo
-                $this->associado = new Associado($associado);               
+                $this->associado = new Associado($associado); 
 
                 //Iniciar log da linha do associado em questão / iteração do loop
                 $this->linhaLogString .= 'ASSOCIADO LINHA ' . (string)($key + 1) . PHP_EOL .
                                 'Nome: ' . $this->associado->nome . PHP_EOL .
                                 'Matricula: ' . $this->associado->matricula . PHP_EOL;      
 
-                $cep = MascaraHelper::formataMascara($this->associado->cep, '#####-###');        
-                $this->validadorCEP = new ValidadorCEP();                                  
+                $cep = StringHelper::formataMascara($this->associado->cep, '#####-###');        
+                $this->validadorCEP = new ValidadorCEP();    
 
-                if(!$this->__validarSeDeveContinuarComAssociado($cep))
-                    continue;
 
-                $bairroCidadeEstadoString = NULL;
 
-                $enderecoString = '';
-                $this->__tratamentosEAnalisesEmFuncaoDoCep($enderecoString, $bairroCidadeEstadoString, $cep);
-           
-                $this->__consideracoesFinais($enderecoString);
+                if(!$this->__validarSeDeveContinuarComAssociado($cep)) {
+
+                    if(isset($this->planilhaAnaliseRegiaoOks)) {
+
+                        $this->__gravaNaoOk();
+                    }                    
+                }
+                else {
+
+                    $bairroCidadeEstadoString = NULL;
+
+                    $enderecoString = '';
+                    $this->__tratamentosEAnalisesEmFuncaoDoCep($enderecoString, $bairroCidadeEstadoString, $cep);
+               
+                    $this->__consideracoesFinais($enderecoString);
+
+                    if(isset($this->planilhaAnaliseRegiaoOks)) 
+                        $this->__gravaOk();
+                }
+
+                echo '<pre>';
+                print_r($this->tmpAssociadoOk);
+                print_r($this->tmpAssociadoNaoOk);
+                die();
 
                 $this->__montaConteudoSaida($cep, $enderecoString, $bairroCidadeEstadoString);
 
-                $this->logString .= $this->linhaLogString;                
+                if(isset($this->logString)) {
+
+                    $this->linhaLogString .= 'Etiqueta gerada.' . PHP_EOL . PHP_EOL;
+                    $this->logString .= $this->linhaLogString;                
+                }                
+
+                $this->tmpAssociadoOk = NULL;
+                $this->tmpAssociadoNaoOk = NULL;
             }
 
             //Salvar arquivo de log
-            $this->logDepuracao->fwrite($this->linhaLogString);
+            if(isset($this->logDepuracao))
+                $this->logDepuracao->fwrite($this->logString);
+        }
+
+        /**
+         * Método que grava associado com cadastro ok, instanciando e armazenando-o em objeto da classe TmpAssociado,
+         *  para uso futuro ao montar as células da linha no arquivo excel
+         */
+        private function __gravaOk() {
+
+            $this->tmpAssociadoOk = new TmpAssociado($this->associado, $this->validadorCEP, $this->linhaLogString);                   
+        }
+
+        /**
+         * Método que grava associado com cadastro não ok, instanciando e armazenando-o em objeto da classe TmpAssociado,
+         *  para uso futuro ao montar as células da linha no arquivo excel
+         */
+        private function __gravaNaoOk() {
+
+            $this->tmpAssociadoNaoOk = new TmpAssociado($this->associado, $this->validadorCEP, $this->linhaLogString);        
         }
 
         /**
@@ -145,7 +209,7 @@
             //Se o endereço for vazio, pular linha e não gerar etiqueta para o associado em questão
             if(empty($this->associado->endereco)) {
 
-                $this->linhaLogString .= 'ENDERECO INADEQUADO PARA GERAR ETIQUETA! CAMPO ENDERECO VAZIO!' . PHP_EOL . PHP_EOL;
+                $this->linhaLogString .= 'ENDERECO INADEQUADO PARA GERAR ETIQUETA! CAMPO ENDERECO VAZIO!' . PHP_EOL . PHP_EOL;                
                 return false;
             }              
 
@@ -248,20 +312,98 @@
                 $this->__montaEtiquetaFPDF($this->associado->nome, $cep, $enderecoString, $bairroCidadeEstadoString);
             elseif(is_object($this->planilhaExcel) && (new \ReflectionClass($this->planilhaExcel))->getShortName() == 'Spreadsheet')
                 $this->__montaCelulasLinhaPlanilha($this->associado->nome, $cep, $enderecoString, $bairroCidadeEstadoString);
-
-            $this->linhaLogString .= 'Etiqueta gerada.' . PHP_EOL . PHP_EOL;
+            elseif(is_object($this->planilhaAnaliseRegiaoOks) && (new \ReflectionClass($this->planilhaExcel))->getShortName() == 'Spreadsheet')
+                $this->__montaCelulasLinhaplanilhaAnaliseRegiao();            
         }
 
-        private function __iniciaTmpAssociados() {
+        /**
+         * Método que inicia os objetos que abstraem os aspectos da implementação da saída em .xlsx da análise da região
+         */
+        private function __iniciaAnaliseRegiaoXlsx() {
 
-            $this->tmpAssociadoDAO = new TmpAssociadoDAO();
-            $this->tmpAssociadoDAO->limpaTabela();
+            $this->__iniciaAnaliseRegiaoOksXlsx();
+            $this->__iniciaAnaliseRegiaoNaoOksXlsx();
         }
+
+        /**
+         * Método que inicia o objeto que abstrai os aspectos da implementação da saída em .xlsx dos cadastros oks da análise da região
+         */
+        private function __iniciaAnaliseRegiaoOksXlsx() {
+
+            $this->planilhaAnaliseRegiaoOks = new Spreadsheet();
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks = $this->planilhaAnaliseRegiaoOks->getActiveSheet();
+            $this->escritorplanilhaAnaliseRegiaoOks = new Xlsx($this->planilhaAnaliseRegiaoOks);
+
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('A1', 'NOME');
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('B1', 'MATRÍCULA');
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('C1', 'ENDEREÇO');
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('D1', 'Nº');            
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('E1', 'COMPLEMENTO');
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('F1', 'BAIRRO');
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('G1', 'CIDADE');
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('H1', 'ESTADO');
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('I1', 'CEP');
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('J1', 'ENDEREÇO VIACEP');
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('K1', 'COMPLEMENTO VIACEP');
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('L1', 'BAIRRO VIACEP');
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('M1', 'CIDADE VIACEP');
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('N1', 'ESTADO VIACEP');
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('O1', 'ANÁLISE');            
+
+            $this->linhaXlsxOks = 2;  
+        }
+
+        /**
+         * Método que inicia o objeto que abstrai os aspectos da implementação da saída em .xlsx dos cadastros não oks da análise da região
+         */
+        private function __iniciaAnaliseRegiaoNaoOksXlsx() {
+
+            $this->planilhaAnaliseRegiaoNaoOks = new Spreadsheet();
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks = $this->planilhaAnaliseRegiaoNaoOks->getActiveSheet();
+            $this->escritorplanilhaAnaliseRegiaoNaoOks = new Xlsx($this->planilhaAnaliseRegiaoNaoOks);
+
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('A1', 'NOME');
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('B1', 'MATRÍCULA');
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('C1', 'ENDEREÇO');
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('D1', 'Nº');            
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('E1', 'COMPLEMENTO');
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('F1', 'BAIRRO');
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('G1', 'CIDADE');
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('H1', 'ESTADO');
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('I1', 'CEP');
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('J1', 'ENDEREÇO VIACEP');
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('K1', 'COMPLEMENTO VIACEP');
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('L1', 'BAIRRO VIACEP');
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('M1', 'CIDADE VIACEP');
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('N1', 'ESTADO VIACEP');
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('O1', 'ANÁLISE');            
+
+            $this->linhaXlsxNaoOks = 2;  
+        }        
+
+        /**
+         * Método que inicia o objeto que abstrai os aspectos da implementação da saída em .xlsx
+         */
+        private function __iniciaXlsx() {
+
+            $this->planilhaExcel = new Spreadsheet();
+            $this->folhaAtivaPlanilha = $this->planilhaExcel->getActiveSheet();
+            $this->escritorPlanilha = new Xlsx($this->planilhaExcel);
+
+            $this->linhaXlsx = 1;            
+        }        
 
         /**
          * Método que inicia o objeto que abstrai os aspectos da implementação da saída em .pdf
          */
         private function __iniciaFPDF() {
+
+            $this->mesq = 7;
+            $this->mdir = 8;
+            $this->msup = 22;
+            $this->leti = 107;
+            $this->aeti = 25.4;
+            $this->ehet = 100;            
 
             $this->fpdf = new FPDF('P','mm','Letter'); // Cria um arquivo novo tipo carta, na vertical.
 
@@ -273,8 +415,8 @@
             $this->fpdf->SetFont('helvetica','B',8.5); // Define a fonte
             $this->fpdf->SetDisplayMode();
 
-            $this->linha = 0;
-            $this->coluna = 0;
+            $this->linhaPdf = 0;
+            $this->colunaPdf = 0;
         }
 
         /**
@@ -282,28 +424,28 @@
          */
         private function __montaEtiquetaFPDF($nome, $cep, $enderecoString, $bairroCidadeEstadoString = NULL) {
 
-            if($this->linha == 10) {
+            if($this->linhaPdf == 10) {
 
                 $this->fpdf->AddPage();
-                $this->linha = 0;
+                $this->linhaPdf = 0;
             }
             
-            if($this->coluna == 2) { // Se for a terceira coluna
+            if($this->colunaPdf == 2) { // Se for a terceira coluna
 
-                $this->coluna = 0; // $coluna volta para o valor inicial
-                $this->linha++; // $linha é igual ela mesma +1
+                $this->colunaPdf = 0; // $coluna volta para o valor inicial
+                $this->linhaPdf++; // $linha é igual ela mesma +1
             }
             
-            if($this->linha == 10) { // Se for a última linha da página
+            if($this->linhaPdf == 10) { // Se for a última linha da página
 
                 $this->fpdf->AddPage(); // Adiciona uma nova página
-                $this->linha = 0; // $linha volta ao seu valor inicial
+                $this->linhaPdf = 0; // $linha volta ao seu valor inicial
             }
             
-            $posicaoV = $this->linha*$this->aeti;
-            $posicaoH = $this->coluna*$this->leti;
+            $posicaoV = $this->linhaPdf*$this->aeti;
+            $posicaoH = $this->colunaPdf*$this->leti;
             
-            if($this->coluna == 0) { // Se a coluna for 0
+            if($this->colunaPdf == 0) { // Se a coluna for 0
 
                 $somaH = $this->mesq; // Soma Horizontal é apenas a margem da esquerda inicial
             } 
@@ -312,7 +454,7 @@
                 $somaH = $this->mesq+$posicaoH; // Soma Horizontal é a margem inicial mais a posiçãoH
             }
             
-            if($this->linha == 0 ) { // Se a linha for 0
+            if($this->linhaPdf == 0 ) { // Se a linha for 0
 
                 $somaV = $this->msup; // Soma Vertical é apenas a margem superior inicial
             } 
@@ -336,19 +478,7 @@
             }
 
             $this->fpdf->Text($somaH,$cep_y_pos, 'CEP: ' . $cep);                            
-            $this->coluna = $this->coluna+1;
-        }
-
-        /**
-         * Método que inicia o objeto que abstrai os aspectos da implementação da saída em .xlsx
-         */
-        private function __iniciaXlsx() {
-
-            $this->planilhaExcel = new Spreadsheet();
-            $this->folhaAtivaPlanilha = $this->planilhaExcel->getActiveSheet();
-            $this->escritorPlanilha = new Xlsx($this->planilhaExcel);
-
-            $this->linha = 0;            
+            $this->colunaPdf = $this->colunaPdf+1;
         }
 
         /**
@@ -356,25 +486,106 @@
          */ 
         private function __montaCelulasLinhaPlanilha($nome, $cep, $enderecoString, $bairroCidadeEstadoString = '') {
 
-            $this->folhaAtivaPlanilha->setCellValue('A' . $this->linha, $nome);
-            $this->folhaAtivaPlanilha->setCellValue('B' . $this->linha, $enderecoString . ' ' . $bairroCidadeEstadoString);
-            $this->folhaAtivaPlanilha->setCellValue('C' . $this->linha, $cep);
-            $this->linha++;
-        }        
+            $this->folhaAtivaPlanilha->setCellValue('A' . $this->linhaXlsx, $nome);
+            $this->folhaAtivaPlanilha->setCellValue('B' . $this->linhaXlsx, $enderecoString . ' ' . $bairroCidadeEstadoString);
+            $this->folhaAtivaPlanilha->setCellValue('C' . $this->linhaXlsx, $cep);
+            $this->linhaXlsx++;
+        } 
 
+        /**
+         * Método que chama a montagem de células da linha de associados para oks ou não oks
+         */
+        private function __montaCelulasLinhaplanilhaAnaliseRegiao() {
+
+            if(isset($this->tmpAssociadoOk))
+                $this->__montaCelulasLinhaplanilhaAnaliseRegiaoOks();
+            elseif(isset($this->tmpAssociadoNaoOk))
+                $this->__montaCelulasLinhaplanilhaAnaliseRegiaoNaoOks();
+        }
+
+        /**
+         * Método que monta as células da linha do associado na planilha de oks da análise da região xlsx
+         */
+        private function __montaCelulasLinhaplanilhaAnaliseRegiaoOks() {
+
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('A' . $this->linhaXlsxOks, $this->tmpAssociadoOk->nome);
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('B' . $this->linhaXlsxOks, $this->tmpAssociadoOk->matricula);
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('C' . $this->linhaXlsxOks, $this->tmpAssociadoOk->endereco);
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('D' . $this->linhaXlsxOks, $this->tmpAssociadoOk->numero);            
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('E' . $this->linhaXlsxOks, $this->tmpAssociadoOk->complemento);
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('F' . $this->linhaXlsxOks, $this->tmpAssociadoOk->bairro);
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('G' . $this->linhaXlsxOks, $this->tmpAssociadoOk->cidade);
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('H' . $this->linhaXlsxOks, $this->tmpAssociadoOk->estadp);
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('I' . $this->linhaXlsxOks, $this->tmpAssociadoOk->cep);
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('J' . $this->linhaXlsxOks, $this->tmpAssociadoOk->enderecoViaCEP);
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('K' . $this->linhaXlsxOks, $this->tmpAssociadoOk->complementoViaCEP);
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('L' . $this->linhaXlsxOks, $this->tmpAssociadoOk->bairroViaCEP);
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('M' . $this->linhaXlsxOks, $this->tmpAssociadoOk->cidadeViaCEP);
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('N' . $this->linhaXlsxOks, $this->tmpAssociadoOk->estadoViaCEP);
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('O' . $this->linhaXlsxOks, $this->tmpAssociadoOk->textoAnalise); 
+
+            $this->linhaXlsxOks++;           
+        }       
+
+        /**
+         * Método que monta as células da linha do associado na planilha de não oks da análise da região xlsx        
+         */
+        private function __montaCelulasLinhaplanilhaAnaliseRegiaoNaoOks() {
+
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('A' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->nome);
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('B' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->matricula);
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('C' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->endereco);
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('D' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->numero);            
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('E' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->complemento);
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('F' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->bairro);
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('G' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->cidade);
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('H' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->estadp);
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('I' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->cep);
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('J' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->enderecoViaCEP);
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('K' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->complementoViaCEP);
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('L' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->bairroViaCEP);
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('M' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->cidadeViaCEP);
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('N' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->estadoViaCEP);
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('O' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->textoAnalise);             
+            $this->linhaXlsxNaoOks++;            
+        }  
+
+        /**
+         * Método que escreve a saída
+         * @return boolean
+         */
         public function saida() {
 
             if(is_object($this->fpdf) && (new \ReflectionClass($this->fpdf))->getShortName() == 'FPDF') {
                                 
                 $this->fpdf->Output();
+
+                return true;
             } 
             elseif(is_object($this->planilhaExcel) && (new \ReflectionClass($this->planilhaExcel))->getShortName() == 'Spreadsheet') {
                 
                 $this->escritorPlanilha->save('arquivos_saida' . DS . DataHoraFactory::getDataHora()->format('Y-m-d_H-i') . '.xlsx');
-            }
-            else {
 
-                die('Saída não definida.');
-            }         
+                return true;
+            }
+
+            $retorno = false;
+
+            if(is_object($this->planilhaAnaliseRegiaoNaoOks) && (new \ReflectionClass($this->planilhaAnaliseRegiaoNaoOks))->getShortName() == 'Spreadsheet') {
+
+               $this->escritorplanilhaAnaliseRegiaoNaoOks->save('arquivos_saida' . DS . 'xlsxs' . DS . $this->nomePastaRegiao . DS . 'nao_oks' . DS . DataHoraFactory::getDataHora()->format('Y-m-d_H-i') . '.xlsx');
+
+               $retorno = true;
+                
+            }            
+            
+            if(is_object($this->planilhaAnaliseRegiaoOks) && (new \ReflectionClass($this->planilhaAnaliseRegiaoOks))->getShortName() == 'Spreadsheet') {
+
+                $this->escritorplanilhaAnaliseRegiaoOks->save('arquivos_saida' . DS . 'xlsxs' . DS . $this->nomePastaRegiao . DS . 'oks' . DS . DataHoraFactory::getDataHora()->format('Y-m-d_H-i') . '.xlsx'); 
+
+                $retorno = true;
+            }
+
+            return $retorno;
         }
     }
