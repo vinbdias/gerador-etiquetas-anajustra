@@ -20,21 +20,15 @@
         <h3 align="center" style="font-weight:bold">Gerador de etiquetas PIMACO modelo 6181 (20 etiquetas)</h3><p>&nbsp;</p></div>
           <div class="panel panel-primary col-md-12">
             <div class="panel-body">
-              <h4 class="text-on-pannel text-primary"><strong class="text-uppercase">Região TRT</strong></h4>
-                <form action="gera-etiquetas-regiaotrts.php" id="form-gera-etiquetas-regioestrts" method="post">
-                    <div class="form-group">
-                        <label for="regiao"></label><br/>
-                        <select id="regiao" name="regiao" class="form-control">
-                            <option value="">-</option>
-                        </select>
-                    </div>
-                    <div id="container-mensagem-erro" class="alert-danger"></div>                    
-                </form>
+              <h4><strong class="text-uppercase">Regiões TRT</strong></h4>
+              <ul id="lista-regioes">
+                  <li id="cabecalho-lista-regioes">Carregando Regiões</li>
+              </ul>
             </div>
           </div>                         
       </div>
       <p align="center">
-        <button onclick="geradorEtiquetasRegiaoController.submeteFormulario(event)" id="gerar-etiquetas" class="btn btn-primary" type="submit" style="margin-top: 50px;">GERAR ETIQUETAS</button> 
+        <button onclick="geradorEtiquetasRegiaoController.submeteFormulario(event)" id="gerar-etiquetas" class="btn btn-primary" type="submit" style="margin-top: 50px;" disabled="true">GERAR ANÁLISES REGIÕES</button> 
       </p>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="js/app/polyfill/fetch.js"></script>

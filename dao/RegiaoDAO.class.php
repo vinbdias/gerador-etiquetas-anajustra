@@ -40,7 +40,7 @@
          */
         public function obterNomeRegiao($regiaoID) {
 
-            $stringConsultaSql = "SELECT LOTACAO, rowguid FROM cd_lotacao WHERE ID_LOTACAO = " . $regiaoID;
+            $stringConsultaSql = "SELECT LOTACAO, rowguid FROM cd_lotacao WHERE ID_LOTACAO = " . $regiaoID . " ORDER BY LOTACAO ASC";
 
             try {
 

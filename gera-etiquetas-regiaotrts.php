@@ -4,6 +4,7 @@
 
     require_once('./paths.php');
     require_once(__CLASS_PATH__ . 'GeradorEtiquetasMain.class.php');
+    require_once(__HELPERS_PATH__ . 'UrlHelper.class.php');
     
     $_JSONPOST = json_decode( file_get_contents( 'php://input' ), true );
 
@@ -16,12 +17,14 @@
         $regiaoID = $_REQUEST['regiao'];
     }
 
+
+
+
     if(isset($regiaoID) && $regiaoID > 0) {
 
-        $geradorEtiquetasMain = new GeradorEtiquetasMain('analiseRegiaoXlsx');
+        $geradorEtiquetasMain = new GeradorEtiquetasMain(array('xlsx'), true);
         $geradorEtiquetasMain->geraEtiquetasRegiao((int) $regiaoID);
-        $geradorEtiquetasMain->saida(); 
-        echo json_encode(array('resposta' => true));    
+        echo json_encode($geradorEtiquetasMain->saida());        
     }
     else {
 

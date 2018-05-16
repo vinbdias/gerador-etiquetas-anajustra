@@ -72,9 +72,11 @@
          * @param int $regiaoID
          * @return array
          */
-        public function obterAssociadosAPartirDeRegiao($regiaoID) {
+        public function obterAssociadosAPartirDeRegiao($regiaoID, $limiteConsulta = NULL) {
 
-            $stringConsultaSql = "SELECT TOP (50) ASS.ID, ASS.MATRICULA, ASS.NOME_TITULAR,  
+            $stringConsultaSql = "SELECT " .
+            ((isset($limiteConsulta)) ? "TOP(" . $limiteConsulta . ") " : "") .
+                                        "ASS.ID, ASS.MATRICULA, ASS.NOME_TITULAR,  
                                          ASS.ENDERECO, ASS.NUMERO, ASS.COMPLEMENTO,
                                          ASS.BAIRRO, ASS.CIDADE, EST.SIGLA, ASS.CEP                                
                                   FROM [INTRANET_ANAJUSTRA].[dbo].ASSOCIADOS_COMPLETO ASS 

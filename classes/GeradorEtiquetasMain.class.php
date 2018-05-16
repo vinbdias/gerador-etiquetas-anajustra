@@ -6,9 +6,11 @@
     require_once(__VENDOR_PATH__ . 'autoload.php');        
     
     require_once(__HELPERS_PATH__ . 'StringHelper.class.php');
+    require_once(__HELPERS_PATH__ . 'UrlHelper.class.php');
 
     require_once(__SERVICES_PATH__ . 'ValidadorCEP.class.php');
     require_once(__SERVICES_PATH__ . 'ArquivoLogFactory.class.php');
+    require_once(__SERVICES_PATH__ . 'PastaSaidaXlsxRegiaoFactory.class.php');
 
     require_once(__DAO_PATH__ . 'AssociadoDAO.class.php');
     require_once(__DAO_PATH__ . 'TmpAssociadoDAO.class.php');
@@ -41,6 +43,8 @@
         private $planilhaAnaliseRegiaoOks = NULL;
         private $planilhaAnaliseRegiaoNaoOks = NULL;
 
+        private $planilhaArquivoParaEnvio = NULL;
+
         private $logDepuracao = NULL;
         private $logString = '';
         private $linhaLogString = '';
@@ -65,15 +69,26 @@
         private $regiaoDAO = NULL;  
         private $nomeRegiao = '';    
 
-        private $saidaEm = 'pdf';
+        private $saidaEm = array('pdf');
+
+        private $testeMockup = false;
+        private $limiteConsultaAssociadosTesteMockup = 50;
+
+        private $geraArquivoEnvio = false;
+
+        private $salvarArquivoLog = false;
 
         /**
          * Método construtor
-         * @param string $saidaEm
+         * @param array $saidaEm
          */
-        public function __construct($saidaEm = '') {
-
+        public function __construct($saidaEm = array('pdf'), $testeMockup = false, $salvarArquivoLog = false) {
+        
             $this->saidaEm = $saidaEm;
+
+            $this->testeMockup = $testeMockup;
+
+            $this->salvarArquivoLog = $salvarArquivoLog;
 
             $this->logDepuracao = ArquivoLogFactory::getArquivoLog(); 
             $this->associadoDAO = new AssociadoDAO();
@@ -93,8 +108,8 @@
          * Método que implementa a execução da página gera-etiquetas-regiaotrts.php
          */
         public function geraEtiquetasRegiao($regiao) {
-
-            $this->associados = $this->associadoDAO->obterAssociadosAPartirDeRegiao($regiao);
+            
+            $this->associados = $this->associadoDAO->obterAssociadosAPartirDeRegiao($regiao, $this->limiteConsultaAssociadosTesteMockup);
 
             $this->nomeRegiao = (new RegiaoDAO())->obterNomeRegiao($regiao);
             $this->nomePastaRegiao = StringHelper::formataParaNomeDeArquivo($this->nomeRegiao);        
@@ -107,15 +122,22 @@
          */
         private function __main() { 
 
-            if($this->saidaEm == 'pdf')
+            if(in_array('pdf', $this->saidaEm))
                 $this->__iniciaFPDF();            
-            elseif($this->saidaEm == 'xlsx') 
-                $this->__iniciaXlsx();  
-            elseif($this->saidaEm == 'analiseRegiaoXlsx')    
-                $this->__iniciaAnaliseRegiaoXlsx();             
+            else {
+
+                if(in_array('xlsx', $this->saidaEm)) 
+                    $this->__iniciaXlsx();  
+
+                if(in_array('xlsxOks', $this->saidaEm))    
+                    $this->__iniciaAnaliseRegiaoOksXlsx();
+
+                if(in_array('xlsxNaoOks', $this->saidaEm))
+                    $this->__iniciaAnaliseRegiaoNaoOksXlsx();
+            }             
 
             //Iniciar o arquivo de log
-            if(!isset($this->planilhaAnaliseRegiaoOks)) {
+            if($this->salvarArquivoLog) {
 
                 $this->logDepuracao = ArquivoLogFactory::getArquivoLog();         
                 $this->logString = 'CONSULTA SQL EXECUTADA: ' . $this->associadoDAO->getStringConsultaSql() . PHP_EOL . PHP_EOL;             
@@ -141,7 +163,7 @@
 
                 if(!$this->__validarSeDeveContinuarComAssociado($cep)) {
 
-                    if(isset($this->planilhaAnaliseRegiaoOks)) {
+                    if(isset($this->planilhaAnaliseRegiaoNaoOks)) {
 
                         $this->__gravaNaoOk();
                     }                    
@@ -159,10 +181,6 @@
                         $this->__gravaOk();
                 }
 
-                echo '<pre>';
-                print_r($this->tmpAssociadoOk);
-                print_r($this->tmpAssociadoNaoOk);
-                die();
 
                 $this->__montaConteudoSaida($cep, $enderecoString, $bairroCidadeEstadoString);
 
@@ -220,10 +238,11 @@
                 return false;
             }
 
-            $this->validadorCEP->validar($cep);
+            if(!$this->testeMockup)
+                $this->validadorCEP->validar($cep);
             
             //Se o CEP não for válido, pular linha e não gerar etiqueta para o associado em questão
-            if(!empty($this->validadorCEP->cep)) {
+            if(!empty($this->validadorCEP->cep) || $this->testeMockup) {
                 
                 $this->linhaLogString .= 'CEP validado nos Correios (https://viacep.com.br/)' . PHP_EOL;
             }
@@ -308,12 +327,19 @@
         private function __montaConteudoSaida($cep, $enderecoString, $bairroCidadeEstadoString) {
 
             //Montar linha do PDF ou célula da planilha Xlsx (planilha excel) de acordo com o tipo de saída informada em $saidaEm
-            if(is_object($this->fpdf) && (new \ReflectionClass($this->fpdf))->getShortName() == 'FPDF')
+            if($this->__issetFpdf())
                 $this->__montaEtiquetaFPDF($this->associado->nome, $cep, $enderecoString, $bairroCidadeEstadoString);
-            elseif(is_object($this->planilhaExcel) && (new \ReflectionClass($this->planilhaExcel))->getShortName() == 'Spreadsheet')
-                $this->__montaCelulasLinhaPlanilha($this->associado->nome, $cep, $enderecoString, $bairroCidadeEstadoString);
-            elseif(is_object($this->planilhaAnaliseRegiaoOks) && (new \ReflectionClass($this->planilhaExcel))->getShortName() == 'Spreadsheet')
-                $this->__montaCelulasLinhaplanilhaAnaliseRegiao();            
+            else {
+
+                if($this->__issetPlanilhaExcel())
+                    $this->__montaCelulasLinhaPlanilha($this->associado->nome, $cep, $enderecoString, $bairroCidadeEstadoString);
+                
+                if($this->__issetPlanilhaAnaliseRegiaoOks())
+                    $this->__montaCelulasLinhaplanilhaAnaliseRegiaoOks();
+
+                if($this->__issetPlanilhaAnaliseRegiaoNaoOks())
+                    $this->__montaCelulasLinhaplanilhaAnaliseRegiaoNaoOks();  
+            }          
         }
 
         /**
@@ -324,6 +350,22 @@
             $this->__iniciaAnaliseRegiaoOksXlsx();
             $this->__iniciaAnaliseRegiaoNaoOksXlsx();
         }
+
+        /**
+         * Método que inicia o objeto que abstrai os aspectos da implementação da saída em .xlsx
+         */
+        private function __iniciaXlsx() {
+
+            $this->planilhaExcel = new Spreadsheet();
+            $this->folhaAtivaPlanilha = $this->planilhaExcel->getActiveSheet();
+            $this->escritorPlanilha = new Xlsx($this->planilhaExcel);
+
+            $this->folhaAtivaPlanilha->setCellValue('A1', 'NOME');
+            $this->folhaAtivaPlanilha->setCellValue('B1', 'ENDERECO');
+            $this->folhaAtivaPlanilha->setCellValue('C1', 'CEP');                        
+
+            $this->linhaXlsx = 2;            
+        }         
 
         /**
          * Método que inicia o objeto que abstrai os aspectos da implementação da saída em .xlsx dos cadastros oks da análise da região
@@ -379,18 +421,6 @@
             $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('O1', 'ANÁLISE');            
 
             $this->linhaXlsxNaoOks = 2;  
-        }        
-
-        /**
-         * Método que inicia o objeto que abstrai os aspectos da implementação da saída em .xlsx
-         */
-        private function __iniciaXlsx() {
-
-            $this->planilhaExcel = new Spreadsheet();
-            $this->folhaAtivaPlanilha = $this->planilhaExcel->getActiveSheet();
-            $this->escritorPlanilha = new Xlsx($this->planilhaExcel);
-
-            $this->linhaXlsx = 1;            
         }        
 
         /**
@@ -515,7 +545,7 @@
             $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('E' . $this->linhaXlsxOks, $this->tmpAssociadoOk->complemento);
             $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('F' . $this->linhaXlsxOks, $this->tmpAssociadoOk->bairro);
             $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('G' . $this->linhaXlsxOks, $this->tmpAssociadoOk->cidade);
-            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('H' . $this->linhaXlsxOks, $this->tmpAssociadoOk->estadp);
+            $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('H' . $this->linhaXlsxOks, $this->tmpAssociadoOk->estado);
             $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('I' . $this->linhaXlsxOks, $this->tmpAssociadoOk->cep);
             $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('J' . $this->linhaXlsxOks, $this->tmpAssociadoOk->enderecoViaCEP);
             $this->folhaAtivaplanilhaAnaliseRegiaoOks->setCellValue('K' . $this->linhaXlsxOks, $this->tmpAssociadoOk->complementoViaCEP);
@@ -539,7 +569,7 @@
             $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('E' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->complemento);
             $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('F' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->bairro);
             $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('G' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->cidade);
-            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('H' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->estadp);
+            $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('H' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->estado);
             $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('I' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->cep);
             $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('J' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->enderecoViaCEP);
             $this->folhaAtivaplanilhaAnaliseRegiaoNaoOks->setCellValue('K' . $this->linhaXlsxNaoOks, $this->tmpAssociadoNaoOk->complementoViaCEP);
@@ -556,36 +586,101 @@
          */
         public function saida() {
 
-            if(is_object($this->fpdf) && (new \ReflectionClass($this->fpdf))->getShortName() == 'FPDF') {
+            $retorno = array();
+
+            if($this->__issetFpdf()) {
                                 
                 $this->fpdf->Output();
 
                 return true;
             } 
-            elseif(is_object($this->planilhaExcel) && (new \ReflectionClass($this->planilhaExcel))->getShortName() == 'Spreadsheet') {
-                
-                $this->escritorPlanilha->save('arquivos_saida' . DS . DataHoraFactory::getDataHora()->format('Y-m-d_H-i') . '.xlsx');
+            else {
 
+                if($this->__issetPlanilhaExcel()) {  
+
+                    $caminhoXlsx = (isset($this->nomePastaRegiao) && $this->nomePastaRegiao != '') ?
+                     'arquivos_saida' . DS . 'xlsxs' . DS . $this->nomePastaRegiao . DS . 'pimaco' :
+                      'arquivos_saida' . DS . 'xlsxs';                  
+                    
+                    $nomeXlsx = $caminhoXlsx . DS . DataHoraFactory::getDataHora()->format('Y-m-d_H-i') . '.xlsx';
+
+                    PastaSaidaXlsxRegiaoFactory::criaPastaSaidaXlsxPimaco($caminhoXlsx);
+
+                    $this->escritorPlanilha->save($nomeXlsx);
+
+                    $retorno['nomeXlsx'] = UrlHelper::obtemBaseUrl() . str_replace(DS, '/', $nomeXlsx);
+                }      
+
+                if($this->__issetPlanilhaAnaliseRegiaoNaoOks()) {
+
+                   PastaSaidaXlsxRegiaoFactory::criaPastaSaidaXlsxNaoOksRegiao($this->nomePastaRegiao);
+
+                   $nomeXlsxNaoOk = 'arquivos_saida' . DS . 'xlsxs' . DS . $this->nomePastaRegiao . DS . 'nao_oks' . DS . DataHoraFactory::getDataHora()->format('Y-m-d_H-i') . '.xlsx';
+                   $this->escritorplanilhaAnaliseRegiaoNaoOks->save($nomeXlsxNaoOk);
+
+                   $retorno['nomeXlsxNaoOk'] = UrlHelper::obtemBaseUrl() . str_replace(DS, '/', $nomeXlsxNaoOk);                
+                }            
+                
+                if($this->__issetPlanilhaAnaliseRegiaoOks()) {
+
+                    PastaSaidaXlsxRegiaoFactory::criaPastaSaidaXlsxOksRegiao($this->nomePastaRegiao);
+
+                    $nomeXlsxOk = 'arquivos_saida' . DS . 'xlsxs' . DS . $this->nomePastaRegiao . DS . 'oks' . DS . DataHoraFactory::getDataHora()->format('Y-m-d_H-i') . '.xlsx';
+                    $this->escritorplanilhaAnaliseRegiaoOks->save($nomeXlsxOk); 
+
+                    $retorno['nomeXlsxOk'] = UrlHelper::obtemBaseUrl() . str_replace(DS, '/', $nomeXlsxOk);
+                }                        
+
+            }
+
+            return $retorno;  
+        }
+
+        /**
+         *Método que verifica se o objeto que trabalha com o pdf foi criado
+         * @return boolean
+         */
+        private function __issetFpdf() {
+
+            if(is_object($this->fpdf) && (new \ReflectionClass($this->fpdf))->getShortName() == 'FPDF')
                 return true;
-            }
 
-            $retorno = false;
+            return false;
+        }
 
-            if(is_object($this->planilhaAnaliseRegiaoNaoOks) && (new \ReflectionClass($this->planilhaAnaliseRegiaoNaoOks))->getShortName() == 'Spreadsheet') {
+        /**
+         * Método que verifica se o objeto que trabalha com a planilha excel foi criado
+         * @return boolean
+         */
+        private function __issetPlanilhaExcel() {
 
-               $this->escritorplanilhaAnaliseRegiaoNaoOks->save('arquivos_saida' . DS . 'xlsxs' . DS . $this->nomePastaRegiao . DS . 'nao_oks' . DS . DataHoraFactory::getDataHora()->format('Y-m-d_H-i') . '.xlsx');
+            if(is_object($this->planilhaExcel) && (new \ReflectionClass($this->planilhaExcel))->getShortName() == 'Spreadsheet')
+                return true;
 
-               $retorno = true;
-                
-            }            
-            
-            if(is_object($this->planilhaAnaliseRegiaoOks) && (new \ReflectionClass($this->planilhaAnaliseRegiaoOks))->getShortName() == 'Spreadsheet') {
+            return false;
+        }
 
-                $this->escritorplanilhaAnaliseRegiaoOks->save('arquivos_saida' . DS . 'xlsxs' . DS . $this->nomePastaRegiao . DS . 'oks' . DS . DataHoraFactory::getDataHora()->format('Y-m-d_H-i') . '.xlsx'); 
+        /**
+         * Método que verifica se o objeto que trabalha com a planilha de análise para cadastros oks foi criada
+         * @return boolean
+         */
+        private function __issetPlanilhaAnaliseRegiaoOks() {
 
-                $retorno = true;
-            }
+            if(is_object($this->planilhaAnaliseRegiaoOks) && (new \ReflectionClass($this->planilhaAnaliseRegiaoOks))->getShortName() == 'Spreadsheet')
+                return true;
 
-            return $retorno;
+            return false;
+        }   
+
+        /**
+         * Método que verifica se o objeto que trabalha com a planilha de análise para cadastros não oks foi criada
+         * @return boolean
+         */
+        private function __issetPlanilhaAnaliseRegiaoNaoOks() {
+
+                if(is_object($this->planilhaAnaliseRegiaoNaoOks) && (new \ReflectionClass($this->planilhaAnaliseRegiaoNaoOks))->getShortName() == 'Spreadsheet')
+                    return true;
+
+                return false;
         }
     }

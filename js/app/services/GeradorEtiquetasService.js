@@ -24,14 +24,14 @@ var GeradorEtiquetasService = function (_HttpService) {
 
             return new Promise(function (resolve, reject) {
 
-                _this2.post('gera-etiquetas-regiaotrts.php', { regiao: regiao }).then(function (resposta) {
+                _this2.post('gera-etiquetas-regiaotrts.php', { regiao: regiao.id }).then(function (resposta) {
 
                     console.log('Etiquetas geradas com sucesso.');
                     resolve(resposta);
                 }).catch(function (erro) {
 
                     console.log(erro);
-                    reject('Não foi possível gerar etiquetas para a região');
+                    reject('Não foi possível gerar etiquetas para a região ' + regiao.lotacao);
                 });
             });
         }

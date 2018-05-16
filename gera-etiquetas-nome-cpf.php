@@ -8,7 +8,7 @@
 
     if(isset($_REQUEST['ids_associados']) && $_REQUEST['ids_associados'] != '') {                  
 
-        $geradorEtiquetasMain = new GeradorEtiquetasMain('pdf');
+        $geradorEtiquetasMain = new GeradorEtiquetasMain(array('pdf'));
         $geradorEtiquetasMain->geraEtiquetasNomeCpf($_REQUEST['ids_associados']);
         $geradorEtiquetasMain->saida();        
     }

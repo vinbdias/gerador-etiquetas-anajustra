@@ -5,69 +5,72 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var GeradorEtiquetasRegiaoController = function () {
-        function GeradorEtiquetasRegiaoController() {
-                _classCallCheck(this, GeradorEtiquetasRegiaoController);
+    function GeradorEtiquetasRegiaoController() {
+        _classCallCheck(this, GeradorEtiquetasRegiaoController);
 
-                this._containerDeMensagemDeErro = $('#container-mensagem-erro');
-                this._containerDeMensagemDeErro.hide();
+        this._inputSubmit = $('#gerar-etiquetas');
 
-                this._formulario = $('#form-gera-etiquetas-regioestrts');
+        this._elementoListaRegioes = $('#lista-regioes');
 
-                this._inputRegiaoTrt = $('#regiao');
-                this._regiaoService = new RegiaoService();
-                this._geradorEtiquetasService = new GeradorEtiquetasService();
+        this._containerDeMensagemDeErro = $('#container-mensagem-erro');
+        this._containerDeMensagemDeErro.hide();
 
-                this._montaInputRegiaoTrt();
+        this._regiaoService = new RegiaoService();
+        this._geradorEtiquetasService = new GeradorEtiquetasService();
+
+        this._regioes = [];
+
+        this._buscaRegioes();
+    }
+
+    _createClass(GeradorEtiquetasRegiaoController, [{
+        key: '_buscaRegioes',
+        value: function _buscaRegioes() {
+            var _this = this;
+
+            this._regiaoService.obterRegioes().then(function (regioes) {
+
+                _this._elementoListaRegioes.html('');
+                regioes.forEach(function (regiao) {
+
+                    _this._regioes.push(regiao);
+                    _this._elementoListaRegioes.append('<li id="regiao-' + regiao.id + '">' + regiao.lotacao + '</li>');
+                });
+
+                _this._inputSubmit.prop('disabled', false);
+            }).catch(function (erro) {
+                return console.log(erro);
+            });
         }
+    }, {
+        key: 'submeteFormulario',
+        value: function submeteFormulario(evento) {
+            var _this2 = this;
 
-        _createClass(GeradorEtiquetasRegiaoController, [{
-                key: '_montaInputRegiaoTrt',
-                value: function _montaInputRegiaoTrt() {
-                        var _this = this;
+            evento.preventDefault();
 
-                        this._regiaoService.obterRegioes().then(function (regioes) {
-                                return regioes.forEach(function (regiao) {
-                                        return _this._inputRegiaoTrt.append($('<option>', { value: regiao.id, text: regiao.lotacao }));
-                                });
-                        }).catch(function (erro) {
-                                return console.log(erro);
-                        });
-                }
-        }, {
-                key: '_validaFormulario',
-                value: function _validaFormulario() {
+            this._regioes.forEach(function (regiao) {
 
-                        if (this._inputRegiaoTrt.val() != '') {
+                _this2._geradorEtiquetasService.gerarEtiquetasRegiao(regiao).then(function (resposta) {
 
-                                return true;
-                        }
+                    var htmlAnterior = $('#regiao-' + regiao.id).html();
+                    var htmlAConcatenar = ' <span style="color: green;">etiquetas geradas com sucesso ' + '<a href="' + resposta.nomeXlsx + '">Arquivo para envio</a></span>';
 
-                        return false;
-                }
-        }, {
-                key: 'submeteFormulario',
-                value: function submeteFormulario(evento) {
+                    $('#regiao-' + regiao.id).html('');
+                    $('#regiao-' + regiao.id).html(htmlAnterior + htmlAConcatenar);
+                }).catch(function (erro) {
 
-                        evento.preventDefault();
+                    var htmlAnterior = $('#regiao-' + regiao.id).html();
+                    var htmlAConcatenar = '<span style="color: red;"> erro ao gerar etiquetas!</span>';
 
-                        this._containerDeMensagemDeErro.html('');
-                        this._containerDeMensagemDeErro.hide();
+                    $('#regiao-' + regiao.id).html('');
+                    $('#regiao-' + regiao.id).html(htmlAnterior + htmlAConcatenar);
+                    console.log(erro);
+                });
+            });
+        }
+    }]);
 
-                        if (!this._validaFormulario()) {
-
-                                this._containerDeMensagemDeErro.html('Favor informar a região');
-                                this._containerDeMensagemDeErro.show();
-                                return false;
-                        }
-
-                        this._geradorEtiquetasService.gerarEtiquetasRegiao(this._inputRegiaoTrt.val()).then(function (resposta) {
-                                return console.log(resposta);
-                        }).catch(function (erro) {
-                                return console.log(erro);
-                        });
-                }
-        }]);
-
-        return GeradorEtiquetasRegiaoController;
+    return GeradorEtiquetasRegiaoController;
 }();
 //# sourceMappingURL=GeradorEtiquetasRegiaoController.js.map
