@@ -92,7 +92,13 @@ class GeradorEtiquetasRegiaoController {
      
     }
 
-    _preparaSubmissao() {    
+    /**
+     * Método que prepara os dados para submissao
+     * @param JSON regiao
+     * @return JSON
+     */
+    _preparaSubmissao(regiao) {    
+
         this._obtemValoresTiposSaidaCheckboxGroup();
 
         return {
@@ -110,6 +116,8 @@ class GeradorEtiquetasRegiaoController {
         this._inputSubmitButton.prop('disabled', true);
         this._inputSubmitButton.hide();
 
+        let dadosSubmissao = this._preparaSubmissao();
+
         this._regioes.forEach(regiao => {
 
             let htmlAnterior = $('#regiao-' + regiao.id).html();
@@ -117,7 +125,7 @@ class GeradorEtiquetasRegiaoController {
             $('#regiao-' + regiao.id).html(htmlAnterior + ' processando...');
 
             this._geradorEtiquetasService
-                .gerarEtiquetasRegiao(this._preparaSubmissao())
+                .gerarEtiquetasRegiao(this._preparaSubmissao(regiao))
                 .then(resposta => {
                     
                     this._trataResposta(regiao.id, resposta);                  

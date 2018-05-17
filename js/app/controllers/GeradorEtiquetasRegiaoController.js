@@ -9,215 +9,235 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  */
 var GeradorEtiquetasRegiaoController = function () {
 
-    /**
-     * Método construtor
-     */
-    function GeradorEtiquetasRegiaoController() {
-        _classCallCheck(this, GeradorEtiquetasRegiaoController);
+        /**
+         * Método construtor
+         */
+        function GeradorEtiquetasRegiaoController() {
+                _classCallCheck(this, GeradorEtiquetasRegiaoController);
 
-        this._inputSubmitButton = $('#gerar-etiquetas');
+                this._inputSubmitButton = $('#gerar-etiquetas');
 
-        this._inputSubmitRecarregaPagina = $('#recarrega-pagina');
+                this._inputSubmitRecarregaPagina = $('#recarrega-pagina');
 
-        this._inputTiposSaidaGroup = [$('#xlsx'), $('#xlsxOks'), $('#xlsxNaoOks')];
-        this._tiposSaida = [];
+                this._inputTiposSaidaGroup = [$('#xlsx'), $('#xlsxOks'), $('#xlsxNaoOks')];
+                this._tiposSaida = [];
 
-        this._divMensagemErro = $('#mensagem-erro');
+                this._inputValidaViaCEP = $('#validacao-viacep');
 
-        this._elementoListaRegioes = $('#lista-regioes');
+                this._divMensagemErro = $('#mensagem-erro');
 
-        this._containerDeMensagemDeErro = $('#container-mensagem-erro');
-        this._containerDeMensagemDeErro.hide();
+                this._elementoListaRegioes = $('#lista-regioes');
 
-        this._regiaoService = new RegiaoService();
-        this._geradorEtiquetasService = new GeradorEtiquetasService();
+                this._containerDeMensagemDeErro = $('#container-mensagem-erro');
+                this._containerDeMensagemDeErro.hide();
 
-        this._regioes = [];
+                this._regiaoService = new RegiaoService();
+                this._geradorEtiquetasService = new GeradorEtiquetasService();
 
-        this._buscaRegioes();
-    }
+                this._regioes = [];
 
-    /**
-     * Método que busca e armazena JSON contendo as regiões
-     */
-
-
-    _createClass(GeradorEtiquetasRegiaoController, [{
-        key: '_buscaRegioes',
-        value: function _buscaRegioes() {
-            var _this = this;
-
-            this._regiaoService.obterRegioes().then(function (regioes) {
-
-                _this._elementoListaRegioes.html('');
-                regioes.forEach(function (regiao) {
-
-                    _this._regioes.push(regiao);
-                    _this._elementoListaRegioes.append('<li id="regiao-' + regiao.id + '">' + regiao.lotacao + '</li>');
-                });
-
-                _this._inputSubmitButton.prop('disabled', false);
-            }).catch(function (erro) {
-                return console.log(erro);
-            });
-        }
-    }, {
-        key: '_obtemValoresTiposSaidaCheckboxGroup',
-        value: function _obtemValoresTiposSaidaCheckboxGroup() {
-            var _this2 = this;
-
-            var tiposSaida = [];
-
-            this._inputTiposSaidaGroup.forEach(function (elemento) {
-
-                _this2._tiposSaida.push({
-                    id: elemento.attr('id'),
-                    valor: elemento.prop('checked') ? 1 : 0
-                });
-            });
+                this._buscaRegioes();
         }
 
         /**
-         * Método responsável por gerenciar a submissão da página
-         * @param Event evento: evento responsável por acionar a execução deste método
+         * Método que busca e armazena JSON contendo as regiões
          */
 
-    }, {
-        key: 'submeteFormulario',
-        value: function submeteFormulario(evento) {
 
-            evento.preventDefault();
+        _createClass(GeradorEtiquetasRegiaoController, [{
+                key: '_buscaRegioes',
+                value: function _buscaRegioes() {
+                        var _this = this;
 
-            this._obtemValoresTiposSaidaCheckboxGroup();
+                        this._regiaoService.obterRegioes().then(function (regioes) {
 
-            if (!this._validaSubmissao()) {
+                                _this._elementoListaRegioes.html('');
+                                regioes.forEach(function (regiao) {
 
-                this._divMensagemErro.html('Favor informar um tipo de saída em arquivo');
-                this._divMensagemErro.show();
+                                        _this._regioes.push(regiao);
+                                        _this._elementoListaRegioes.append('<li id="regiao-' + regiao.id + '">' + regiao.lotacao + '</li>');
+                                });
 
-                return false;
-            }
+                                _this._inputSubmitButton.prop('disabled', false);
+                        }).catch(function (erro) {
+                                return console.log(erro);
+                        });
+                }
+        }, {
+                key: '_obtemValoresTiposSaidaCheckboxGroup',
+                value: function _obtemValoresTiposSaidaCheckboxGroup() {
+                        var _this2 = this;
 
-            this._divMensagemErro.html('');
-            this._divMensagemErro.hide();
+                        var tiposSaida = [];
 
-            this._postaSubmissao();
-        }
+                        this._inputTiposSaidaGroup.forEach(function (elemento) {
 
-        /**
-         * Método que posta as submissões de cada região
-         */
+                                _this2._tiposSaida.push({
+                                        id: elemento.attr('id'),
+                                        valor: elemento.prop('checked') ? 1 : 0
+                                });
+                        });
+                }
 
-    }, {
-        key: '_postaSubmissao',
-        value: function _postaSubmissao() {
-            var _this3 = this;
+                /**
+                 * Método responsável por gerenciar a submissão da página
+                 * @param Event evento: evento responsável por acionar a execução deste método
+                 */
 
-            this._inputSubmitButton.prop('disabled', true);
-            this._inputSubmitButton.hide();
+        }, {
+                key: 'submeteFormulario',
+                value: function submeteFormulario(evento) {
 
-            this._regioes.forEach(function (regiao) {
+                        evento.preventDefault();
 
-                var htmlAnterior = $('#regiao-' + regiao.id).html();
-                var htmlAConcatenar = '';
-                $('#regiao-' + regiao.id).html(htmlAnterior + ' processando...');
+                        this._preparaSubmissao();
 
-                _this3._geradorEtiquetasService.gerarEtiquetasRegiao({
-                    regiao: regiao,
-                    tiposSaida: _this3._tiposSaida
-                }).then(function (resposta) {
+                        if (!this._validaSubmissao()) {
 
-                    _this3._trataResposta(regiao.id, resposta);
-                }).catch(function (erro) {
+                                this._divMensagemErro.html('Favor informar um tipo de saída em arquivo');
+                                this._divMensagemErro.show();
 
-                    htmlAConcatenar = '<span style="color: red;"> erro ao gerar etiquetas!</span>';
+                                return false;
+                        }
 
-                    $('#regiao-' + regiao.id).html('');
-                    $('#regiao-' + regiao.id).html(htmlAnterior + htmlAConcatenar);
-                    console.log(erro);
-                });
-            });
-        }
+                        this._divMensagemErro.html('');
+                        this._divMensagemErro.hide();
 
-        /**
-         * Método que trata a resposta
-         * @param int regiaoId
-         * @param JSON resposta
-         */
+                        this._postaSubmissao();
+                }
 
-    }, {
-        key: '_trataResposta',
-        value: function _trataResposta(regiaoId, resposta) {
+                /**
+                 * Método que prepara os dados para submissao
+                 * @param JSON regiao
+                 * @return JSON
+                 */
 
-            if (resposta.excecoes.length) {
+        }, {
+                key: '_preparaSubmissao',
+                value: function _preparaSubmissao(regiao) {
 
-                this._imprimeExcecoes(regiaoId, resposta.excecoes);
+                        this._obtemValoresTiposSaidaCheckboxGroup();
 
-                return false;
-            }
+                        return {
+                                regiao: regiao,
+                                tiposSaida: this._tiposSaida,
+                                validaViaCEP: this._inputValidaViaCEP.prop('checked') ? 1 : 0
+                        };
+                }
 
-            this._imprimeResposta(regiaoId, resposta);
-        }
+                /**
+                 * Método que posta as submissões de cada região
+                 */
 
-        /**
-         * Método que imprime as exceções
-         * @param int regiaoId
-         * @param JSON resposta
-         */
+        }, {
+                key: '_postaSubmissao',
+                value: function _postaSubmissao() {
+                        var _this3 = this;
 
-    }, {
-        key: '_imprimeExcecoes',
-        value: function _imprimeExcecoes(regiaoId, excecoes) {
+                        this._inputSubmitButton.prop('disabled', true);
+                        this._inputSubmitButton.hide();
 
-            var htmlAnterior = $('#regiao-' + regiaoId).html();
-            var htmlAConcatenar = '';
+                        var dadosSubmissao = this._preparaSubmissao();
 
-            excecoes.forEach(function (excecao) {
+                        this._regioes.forEach(function (regiao) {
 
-                htmlAConcatenar += ' <span style="color: red;">' + excecao + '</span>';
-            });
+                                var htmlAnterior = $('#regiao-' + regiao.id).html();
+                                var htmlAConcatenar = '';
+                                $('#regiao-' + regiao.id).html(htmlAnterior + ' processando...');
 
-            $('#regiao-' + regiaoId).html(htmlAnterior + htmlAConcatenar);
-        }
+                                _this3._geradorEtiquetasService.gerarEtiquetasRegiao(_this3._preparaSubmissao(regiao)).then(function (resposta) {
 
-        /**
-         * Método que imprie a resposta
-         * @param int regiaoId
-         * @param JSON resposta
-         */
+                                        _this3._trataResposta(regiao.id, resposta);
+                                }).catch(function (erro) {
 
-    }, {
-        key: '_imprimeResposta',
-        value: function _imprimeResposta(regiaoId, resposta) {
+                                        htmlAConcatenar = '<span style="color: red;"> erro ao gerar etiquetas!</span>';
 
-            var htmlAnterior = $('#regiao-' + regiaoId).html();
-            var htmlAConcatenar = '';
+                                        $('#regiao-' + regiao.id).html('');
+                                        $('#regiao-' + regiao.id).html(htmlAnterior + htmlAConcatenar);
+                                        console.log(erro);
+                                });
+                        });
+                }
 
-            htmlAConcatenar = '<span style="color: green;">' + resposta.mensagem + ' ' + (resposta.nomeXlsx != '' ? '<a href="' + resposta.nomeXlsx + '" style="color: blue;">Excel PIMACO</a>' : '') + (resposta.nomeXlsxOk != '' ? '<a href="' + resposta.nomeXlsxOk + '" style="color: green;">Excel OKs</a>' : '') + (resposta.nomeXlsxNaoOk != '' ? '<a href="' + resposta.nomeXlsxNaoOk + '" style="color: red">Excel não OKs</a>' : '') + '</span> ';
+                /**
+                 * Método que trata a resposta
+                 * @param int regiaoId
+                 * @param JSON resposta
+                 */
 
-            $('#regiao-' + regiaoId).html(htmlAnterior + htmlAConcatenar);
-        }
+        }, {
+                key: '_trataResposta',
+                value: function _trataResposta(regiaoId, resposta) {
 
-        /**
-         * Método que valida a submissao
-         * @return boolean
-         */
+                        if (resposta.excecoes.length) {
 
-    }, {
-        key: '_validaSubmissao',
-        value: function _validaSubmissao() {
+                                this._imprimeExcecoes(regiaoId, resposta.excecoes);
 
-            var retorno = false;
+                                return false;
+                        }
 
-            this._tiposSaida.forEach(function (tipoSaida) {
+                        this._imprimeResposta(regiaoId, resposta);
+                }
 
-                if (tipoSaida.valor > 0) retorno = true;
-            });
+                /**
+                 * Método que imprime as exceções
+                 * @param int regiaoId
+                 * @param JSON resposta
+                 */
 
-            return retorno;
-        }
-    }]);
+        }, {
+                key: '_imprimeExcecoes',
+                value: function _imprimeExcecoes(regiaoId, excecoes) {
 
-    return GeradorEtiquetasRegiaoController;
+                        var htmlAnterior = $('#regiao-' + regiaoId).html();
+                        var htmlAConcatenar = '';
+
+                        excecoes.forEach(function (excecao) {
+
+                                htmlAConcatenar += ' <span style="color: red;">' + excecao + '</span>';
+                        });
+
+                        $('#regiao-' + regiaoId).html(htmlAnterior + htmlAConcatenar);
+                }
+
+                /**
+                 * Método que imprie a resposta
+                 * @param int regiaoId
+                 * @param JSON resposta
+                 */
+
+        }, {
+                key: '_imprimeResposta',
+                value: function _imprimeResposta(regiaoId, resposta) {
+
+                        var htmlAnterior = $('#regiao-' + regiaoId).html();
+                        var htmlAConcatenar = '';
+
+                        htmlAConcatenar = '<span style="color: green;">' + resposta.mensagem + ' ' + (resposta.nomeXlsx != '' ? '<a href="' + resposta.nomeXlsx + '" style="color: blue;">Excel PIMACO</a>' : '') + (resposta.nomeXlsxOk != '' ? '<a href="' + resposta.nomeXlsxOk + '" style="color: green;">Excel OKs</a>' : '') + (resposta.nomeXlsxNaoOk != '' ? '<a href="' + resposta.nomeXlsxNaoOk + '" style="color: red">Excel não OKs</a>' : '') + '</span> ';
+
+                        $('#regiao-' + regiaoId).html(htmlAnterior + htmlAConcatenar);
+                }
+
+                /**
+                 * Método que valida a submissao
+                 * @return boolean
+                 */
+
+        }, {
+                key: '_validaSubmissao',
+                value: function _validaSubmissao() {
+
+                        var retorno = false;
+
+                        this._tiposSaida.forEach(function (tipoSaida) {
+
+                                if (tipoSaida.valor > 0) retorno = true;
+                        });
+
+                        return retorno;
+                }
+        }]);
+
+        return GeradorEtiquetasRegiaoController;
 }();
 //# sourceMappingURL=GeradorEtiquetasRegiaoController.js.map
