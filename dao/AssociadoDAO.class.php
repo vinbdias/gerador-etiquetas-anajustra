@@ -75,13 +75,14 @@
         public function obterAssociadosAPartirDeRegiao($regiaoID, $limiteConsulta = NULL) {
 
             $stringConsultaSql = "SELECT " .
-            ((isset($limiteConsulta)) ? "TOP(" . $limiteConsulta . ") " : "") .
+                                ((isset($limiteConsulta) && $limiteConsulta > 0) ?
+                                        "TOP(" . $limiteConsulta . ") " : "") .
                                         "ASS.ID, ASS.MATRICULA, ASS.NOME_TITULAR,  
                                          ASS.ENDERECO, ASS.NUMERO, ASS.COMPLEMENTO,
                                          ASS.BAIRRO, ASS.CIDADE, EST.SIGLA, ASS.CEP                                
                                   FROM [INTRANET_ANAJUSTRA].[dbo].ASSOCIADOS_COMPLETO ASS 
                                   INNER JOIN INTRANET_ANAJUSTRA.[dbo].cd_estado EST ON ASS.CD_UF = EST.ID_ESTADO 
-                                  WHERE ASS.CD_LOTACAO = " . $regiaoID;
+                                  WHERE ASS.CD_LOTACAO = " . $regiaoID;            
 
             try {
 

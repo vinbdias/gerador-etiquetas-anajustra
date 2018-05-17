@@ -5,7 +5,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
- * Classe que controla os eventos da tela do gerador de etiquetas
+ * Classe que controla os eventos da tela da página de pesquisa de por nome e CPF de associados para geração de etiquetas em pdf
  */
 var GeradorEtiquetasController = function () {
 
@@ -82,11 +82,11 @@ var GeradorEtiquetasController = function () {
 
     }, {
         key: 'apenasLetras',
-        value: function apenasLetras(event) {
+        value: function apenasLetras(evento) {
             //Permitir: spacebar, backspace, delete, tab, escape, enter and .
-            if ($.inArray(event.keyCode, [32, 46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+            if ($.inArray(evento.keyCode, [32, 46, 8, 9, 27, 13, 110, 190]) !== -1 ||
             //Checar se o keycode da tecla pressionada está dentro dos intervalos de caracteres alfabéticos
-            event.keyCode > 64 && event.keyCode < 91 || event.keyCode > 105 && event.keyCode < 123) {
+            evento.keyCode > 64 && event.keyCode < 91 || evento.keyCode > 105 && event.keyCode < 123) {
                 //Não faz nada
                 return;
             }
@@ -101,18 +101,18 @@ var GeradorEtiquetasController = function () {
 
     }, {
         key: 'apenasNumeros',
-        value: function apenasNumeros(event) {
+        value: function apenasNumeros(evento) {
 
             //Permitir: backspace, delete, tab, escape, enter and .
-            if ($.inArray(event.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+            if ($.inArray(evento.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
             //Permitir: Ctrl/cmd+A
-            event.keyCode == 65 && (event.ctrlKey === true || event.metaKey === true) ||
+            evento.keyCode == 65 && (evento.ctrlKey === true || evento.metaKey === true) ||
             //Permitir: Ctrl/cmd+C
-            event.keyCode == 67 && (event.ctrlKey === true || event.metaKey === true) ||
+            evento.keyCode == 67 && (evento.ctrlKey === true || evento.metaKey === true) ||
             //Permitir: Ctrl/cmd+X
-            event.keyCode == 88 && (event.ctrlKey === true || event.metaKey === true) ||
+            evento.keyCode == 88 && (evento.ctrlKey === true || evento.metaKey === true) ||
             //Permitir: home, end, left, right
-            event.keyCode >= 35 && event.keyCode <= 39) {
+            evento.keyCode >= 35 && evento.keyCode <= 39) {
                 //Não faz nada. Permite a entrada do valor da tecla
                 return;
             }
@@ -172,9 +172,9 @@ var GeradorEtiquetasController = function () {
 
     }, {
         key: 'gerarEtiquetas',
-        value: function gerarEtiquetas(event) {
+        value: function gerarEtiquetas(evento) {
 
-            event.preventDefault();
+            evento.preventDefault();
             window.open('gera-etiquetas-nome-cpf.php?ids_associados=' + this._listaAssociados.obterListaIdsAssociados().join(','));
         }
     }]);

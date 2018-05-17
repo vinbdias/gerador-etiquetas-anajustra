@@ -1,5 +1,12 @@
+/**
+ * Classe que implementa chamadas a métodos fetch
+ */
 class HttpService {
 
+    /**
+     * Método responsável por tratar erros de uma resposta de uma requisição, caso haja um
+     * @param fetch response res
+     */
     _handleErrors(res) {
 
         if(!res.ok) throw new Error(res.statusText);
@@ -7,6 +14,10 @@ class HttpService {
         return res;
     }
 
+    /**
+     * Método responsável por fazer requisições fetch do tipo get
+     * @param String url
+     */
     get(url) {
 
         return fetch(url)
@@ -14,7 +25,12 @@ class HttpService {
             .then(res => res.json());
     }
 
-    post(url, dado) {
+    /**
+     * Método responsável por fazer requisições fetch do tipo post
+     * @param String url
+     * @param JSON dado
+     */
+    post(url, dado) {        
 
         return fetch(url, {
 

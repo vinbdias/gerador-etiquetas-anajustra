@@ -4,6 +4,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * Classe que implementa chamadas a métodos fetch
+ */
 var HttpService = function () {
     function HttpService() {
         _classCallCheck(this, HttpService);
@@ -11,12 +14,24 @@ var HttpService = function () {
 
     _createClass(HttpService, [{
         key: '_handleErrors',
+
+
+        /**
+         * Método responsável por tratar erros de uma resposta de uma requisição, caso haja um
+         * @param fetch response res
+         */
         value: function _handleErrors(res) {
 
             if (!res.ok) throw new Error(res.statusText);
 
             return res;
         }
+
+        /**
+         * Método responsável por fazer requisições fetch do tipo get
+         * @param String url
+         */
+
     }, {
         key: 'get',
         value: function get(url) {
@@ -28,6 +43,13 @@ var HttpService = function () {
                 return res.json();
             });
         }
+
+        /**
+         * Método responsável por fazer requisições fetch do tipo post
+         * @param String url
+         * @param JSON dado
+         */
+
     }, {
         key: 'post',
         value: function post(url, dado) {

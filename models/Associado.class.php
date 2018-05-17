@@ -1,4 +1,6 @@
 <?php 
+    
+    require_once(__HELPERS_PATH__ . 'StringHelper.class.php');
 
     /**
      * Classe modelo de Associado
@@ -19,7 +21,7 @@
 
         /**
          * Método construtor
-         * @param Array $atributos
+         * @param array $atributos
          */
         public function __construct($atributos) {
 
@@ -30,7 +32,9 @@
                 if($chave == 'sigla')
                     $this->estado = trim($valor);
                 elseif($chave == 'nome_titular')
-                    $this->nome = trim(str_ireplace(array('pensionista', 'pencionista', '(', ')'), '', $valor));                
+                    $this->nome = StringHelper::limpaEspacosDuplosCaixaAlta(trim(str_ireplace(array('pensionista', 'pencionista', '(', ')'), '', $valor))); 
+                elseif($chave == 'endereco')
+                    $this->endereco = StringHelper::caixaAltaApenasPrimeiraLetra($valor);               
                 else 
                     $this->$chave = trim($valor);
             }
@@ -47,7 +51,7 @@
          * @param services/ValidadorCEP
          * @return string
          */
-        public function compararEnderecoCadastradoComValidadoNosCorreios($validadorCEP) {
+        public function compararEnderecoCadastradoComValidadoViaCep($validadorCEP) {
 
             $string_analise = '';
 

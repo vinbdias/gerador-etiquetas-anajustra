@@ -4,12 +4,188 @@
 		"selected_items":
 		[
 			[
-				"regi",
-				"regiaoID\t(AssociadoDAO.class.php)"
+				"ex",
+				"excecoes"
+			],
+			[
+				"re",
+				"resposta"
+			],
+			[
+				"_i",
+				"_imprimeResposta"
+			],
+			[
+				"regiao",
+				"regiaoId"
+			],
+			[
+				"tipo",
+				"tipoSaida"
+			],
+			[
+				"displ",
+				"display: 〔property〕"
+			],
+			[
+				"exce",
+				"excecao"
+			],
+			[
+				"ass",
+				"associados〔variable〕"
+			],
+			[
+				"arquivo",
+				"arquivoGerado"
+			],
+			[
+				"__issetPla",
+				"__issetPlanilhaAnaliseRegiaoOks"
+			],
+			[
+				"nome",
+				"nomeXlsx"
+			],
+			[
+				"strin",
+				"stringify\t(HttpService.js)"
+			],
+			[
+				"xlsx",
+				"xlsxNaoOks\t(gera-etiquetas-regioestrts.php)"
+			],
+			[
+				"_in",
+				"_inputTiposSaidaGroup"
+			],
+			[
+				"Strin",
+				"StringHelper.class.php\t(GeradorEtiquetasMain.class.php)"
+			],
+			[
+				"lim",
+				"limpaEspacosDuplosEInicioFim〔function〕"
+			],
+			[
+				"uc",
+				"ucwords"
 			],
 			[
 				"linha",
-				"linhaXlsxNaoOks"
+				"linhaXlsxOks〔variable〕"
+			],
+			[
+				"htmlA",
+				"htmlAnterior"
+			],
+			[
+				"__isset",
+				"__issetPlanilhaAnaliseRegiaoNaoOks〔function〕"
+			],
+			[
+				"tmpAss",
+				"tmpAssociadoNaoOk"
+			],
+			[
+				"tmpA",
+				"tmpAssociadoNaoOk"
+			],
+			[
+				"tmp",
+				"tmpAssociadoOk〔variable〕"
+			],
+			[
+				"__issetTmp",
+				"__issetTmpAssociadoNaoOk"
+			],
+			[
+				"__issetTm",
+				"__issetTmpAssociadoOk"
+			],
+			[
+				"__iss",
+				"__issetTmpAssociadoNaoOk〔function〕"
+			],
+			[
+				"cami",
+				"$caminhoXlsx〔variable〕"
+			],
+			[
+				"limi",
+				"limiteConsultaAssociadosTesteMockUp"
+			],
+			[
+				"Pas",
+				"PastaSaidaXlsxRegiaoFactory"
+			],
+			[
+				"__mon",
+				"__montaCelulasLinhaplanilhaAnaliseRegiaoNaoOks〔function〕"
+			],
+			[
+				"__isse",
+				"__issetFpdf〔function〕"
+			],
+			[
+				"pla",
+				"planilhaAnaliseRegiaoNaoOks"
+			],
+			[
+				"salva",
+				"$salvarArquivoLog〔variable〕"
+			],
+			[
+				"salv",
+				"$salvarArquivoLog〔variable〕"
+			],
+			[
+				"__inicia",
+				"__iniciaAnaliseRegiaoNaoOksXlsx〔function〕"
+			],
+			[
+				"__ini",
+				"__iniciaAnaliseRegiaoOksXlsx"
+			],
+			[
+				"said",
+				"saidaEm〔variable〕"
+			],
+			[
+				"__ise",
+				"__issetFpdf"
+			],
+			[
+				"plan",
+				"planilhaAnaliseRegiaoOks"
+			],
+			[
+				"plani",
+				"planilhaAnaliseRegiaoOks"
+			],
+			[
+				"html",
+				"htmlAConcatenar"
+			],
+			[
+				"arquivos",
+				"arquivos_saida"
+			],
+			[
+				"Url",
+				"UrlHelper\t(UrlHelper.class.php)"
+			],
+			[
+				"U",
+				"UrlHelper\t(UrlHelper.class.php)"
+			],
+			[
+				"base",
+				"baseUrl"
+			],
+			[
+				"regi",
+				"regiaoID\t(AssociadoDAO.class.php)"
 			],
 			[
 				"linhaXls",
@@ -28,10 +204,6 @@
 				"escritorplanilhaAnaliseRegiaoOks"
 			],
 			[
-				"__ini",
-				"__iniciaAnaliseRegiaoOksXlsx〔function〕"
-			],
-			[
 				"__iniciaAna",
 				"__iniciaAnaliseRegiaoNaoOksXlsx"
 			],
@@ -42,10 +214,6 @@
 			[
 				"Regi",
 				"RegiaoDAO\t(RegiaoDAO.class.php)"
-			],
-			[
-				"plan",
-				"planilhaAnaliseRegiaoNaoOks"
 			],
 			[
 				"tex",
@@ -72,20 +240,8 @@
 				"enderecoViaCEP\t(TmpAssociado.class.php)"
 			],
 			[
-				"tmp",
-				"tmpAssociadoOk〔variable〕"
-			],
-			[
-				"__mon",
-				"__montaCelulasLinhaplanilhaAnaliseRegiaoOks〔function〕"
-			],
-			[
 				"tmpAsso",
 				"tmpAssociado"
-			],
-			[
-				"pla",
-				"planilhaAnaliseRegiao"
 			],
 			[
 				"lo",
@@ -132,10 +288,6 @@
 				"require〔keyword〕"
 			],
 			[
-				"regiao",
-				"regiaoID"
-			],
-			[
 				"tmpAs",
 				"tmpAssociadoDAO"
 			],
@@ -160,10 +312,6 @@
 				"GeradorEtiquetasService\t(GeradorEtiquetasService.js)"
 			],
 			[
-				"_in",
-				"_inputRegiaoTrt"
-			],
-			[
 				"ob",
 				"obterRegioes\t(RegiaoService.js)"
 			],
@@ -181,10 +329,6 @@
 			],
 			[
 				"asso",
-				"associadoObj〔variable〕"
-			],
-			[
-				"ass",
 				"associadoObj〔variable〕"
 			],
 			[
@@ -246,10 +390,6 @@
 			[
 				"Asso",
 				"AssociadoDAO〔class〕"
-			],
-			[
-				"strin",
-				"stringConsultaSql"
 			],
 			[
 				"cep",
@@ -332,10 +472,6 @@
 				"executaConsulta\t(AppDAO.class.php)"
 			],
 			[
-				"ex",
-				"executeQuery〔function〕"
-			],
-			[
 				"mon",
 				"montaStringDeConexao"
 			],
@@ -378,152 +514,16 @@
 			[
 				"def",
 				"define〔keyword〕"
-			],
-			[
-				"Spf",
-				"SplFileObject〔class〕"
-			],
-			[
-				"get",
-				"getSplFileOject\t(SplFileObjectFactory.class.php)"
-			],
-			[
-				"SplF",
-				"SplFileObjectFactory\t(SplFileObjectFactory.class.php)"
-			],
-			[
-				"Spl",
-				"SplFileObject\t(gera-etiquetas-nome-cpf.php)"
-			],
-			[
-				"Dat",
-				"DateTimeFactory\t(DateTimeFactory.class.php)"
-			],
-			[
-				"DateTi",
-				"DateTimeZone〔class〕"
-			],
-			[
-				"fun",
-				"function\t(GeradorEtiquetasController.js)"
-			],
-			[
-				"time",
-				"timezone"
-			],
-			[
-				"str_rep",
-				"str_replace〔function〕"
-			],
-			[
-				"_inicia",
-				"_inicializaTagsManager"
-			],
-			[
-				"gera",
-				"geradorEtiquetasController〔variable〕"
-			],
-			[
-				"_inp",
-				"_inputNome"
-			],
-			[
-				"_input",
-				"_inputNome"
-			],
-			[
-				"_inic",
-				"_inicializar_jQueryMaskPlugin"
-			],
-			[
-				"gerad",
-				"geradorEtiquetasController"
-			],
-			[
-				"_inpu",
-				"_inputCpf"
-			],
-			[
-				"lista",
-				"listaAssociados"
-			],
-			[
-				"_",
-				"_inputNome"
-			],
-			[
-				"_lis",
-				"_listaAssociados"
-			],
-			[
-				"_ins",
-				"_instanciarTypeAheadCpf"
-			],
-			[
-				"in",
-				"initialize\t(index.php)"
-			],
-			[
-				"Blo",
-				"BloodhoundFactory\t(index.php)"
-			],
-			[
-				"Bloo",
-				"BloodhoundFactory\t(BloodhoundFactory.js)"
-			],
-			[
-				"remote",
-				"remoteUrl"
-			],
-			[
-				"Blood",
-				"BloodhoundFactory"
-			],
-			[
-				"Bl",
-				"BloodhoundFactory"
-			],
-			[
-				"busca",
-				"busca-nome"
-			],
-			[
-				"marg",
-				"margin-bottom\tproperty"
-			],
-			[
-				"ids",
-				"ids_associados"
-			],
-			[
-				"su",
-				"submit〔function〕"
-			],
-			[
-				"id",
-				"ids_associados"
-			],
-			[
-				"word",
-				"word-break\tproperty"
-			],
-			[
-				"ne",
-				"negociacaoController"
-			],
-			[
-				"Negoc",
-				"NegociacaoController"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "classes/GeradorEtiquetasMain.class.php",
+			"file": "gera-etiquetas-regioestrts.php",
 			"settings":
 			{
-				"buffer_size": 28682,
+				"buffer_size": 3672,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -532,16 +532,53 @@
 			"file": "gera-etiquetas-regiaotrts.php",
 			"settings":
 			{
-				"buffer_size": 911,
+				"buffer_size": 1387,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "dao/TmpAssociadoDAO.class.php",
+			"file": "classes/GeradorEtiquetasMain.class.php",
 			"settings":
 			{
-				"buffer_size": 255,
+				"buffer_size": 34260,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "dao/AssociadoDAO.class.php",
+			"settings":
+			{
+				"buffer_size": 3878,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "js/app-es6/controllers/GeradorEtiquetasRegiaoController.js",
+			"settings":
+			{
+				"buffer_size": 5697,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "js/app-es6/services/GeradorEtiquetasService.js",
+			"settings":
+			{
+				"buffer_size": 820,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "js/app-es6/services/HttpService.js",
+			"settings":
+			{
+				"buffer_size": 989,
+				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		}
@@ -629,42 +666,43 @@
 	"expanded_folders":
 	[
 		"/C/xampp/htdocs/gerador-etiquetas-anajustra",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/arquivos_saida",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/arquivos_saida/logs",
 		"/C/xampp/htdocs/gerador-etiquetas-anajustra/classes",
 		"/C/xampp/htdocs/gerador-etiquetas-anajustra/dao",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/helpers",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/models",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/vendor",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/vendor/phpclasses",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/vendor/phpclasses/dao-for-php"
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/models"
 	],
 	"file_history":
 	[
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/models/Model.class.php",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/models/Associado.class.php",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/dao/RegiaoDAO.class.php",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/dao/AssociadoDAO.class.php",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/dao/TmpAssociadoDAO.class.php",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/models/TmpAssociado.class.php",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/helpers/MascaraHelper.class.php",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/helpers/StringHelper.class.php",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/services/ValidadorCEP.class.php",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/pesquisa-regioestrts.php",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/js/app-es6/services/RegiaoService.js",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/js/app-es6/services/HttpService.js",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/vendor/phpclasses/dao-for-php/DAO.php",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/gera-etiquetas-regiaotrts.php",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/gera-etiquetas-regioestrts.php",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/js/app-es6/services/GeradorEtiquetasService.js",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/js/app-es6/controllers/GeradorEtiquetasRegiaoController.js",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/pesquisa-nome-cpf.php",
 		"/C/xampp/htdocs/gerador-etiquetas-anajustra/gera-etiquetas-nome-cpf.php",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/index.php",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/gerador-etiquetas-regiaotrts.php",
-		"/C/alura/js_avancado_II/aluraframe/client/js/app/controllers/NegociacaoController.js",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/gera-etiquetas-regiaotrts.php",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/dao/AssociadoDAO.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/js/app-es6/services/GeradorEtiquetasService.js",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/services/PastaSaidaXlsxRegiaoFactory.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/classes/GeradorEtiquetasMain.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/models/Associado.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/helpers/StringHelper.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/helpers/UrlHelper.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/js/app-es6/controllers/GeradorEtiquetasRegiaoController.js",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/js/app-es6/controllers/GeradorEtiquetasController.js",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/js/app-es6/services/HttpService.js",
 		"/C/alura/react_I/cdc-admin/src/Autor.js",
 		"/C/alura/react_I/cdc-admin/src/App.js",
+		"/C/alura/react_I/cdc-admin/src/index.js",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/gerador-etiquetas-regiaotrts.php",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/pesquisa-regioestrts.php",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/gera-etiquetas-regioestrts.php",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/dao/RegiaoDAO.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/services/ValidadorCEP.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/models/TmpAssociado.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/js/app-es6/services/RegioesDataSource.js",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/js/app-es6/models/RegioesDataSource.js",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/models/Model.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/dao/TmpAssociadoDAO.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/helpers/MascaraHelper.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/js/app-es6/services/RegiaoService.js",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/vendor/phpclasses/dao-for-php/DAO.php",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/pesquisa-nome-cpf.php",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/index.php",
+		"/C/alura/js_avancado_II/aluraframe/client/js/app/controllers/NegociacaoController.js",
 		"/C/alura/react_I/cdc-admin/src/services/HttpService.js",
 		"/C/alura/react_I/cdc-admin/src/services/AutorService.js",
 		"/C/alura/js_avancado_II/aluraframe/client/js/app/services/NegociacaoService.js",
@@ -676,7 +714,6 @@
 		"//192.168.1.160/e$/WWWSITE/api/gerador-etiquetas/gera-etiquetas-nome-cpf.php",
 		"/C/xampp/htdocs/gerador-etiquetas-anajustra/vendor/psr/simple-cache/src/CacheInterface.php",
 		"/C/xampp/htdocs/gerador-etiquetas-anajustra/services/ArquivoLogFactory.class.php",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/classes/GeradorEtiquetasMain.class.php",
 		"/C/xampp/htdocs/gerador-etiquetas-anajustra/services/ViaCEPService.class.php",
 		"/C/xampp/htdocs/gerador-etiquetas-anajustra/services/ConexaoPDOFactory.class.php",
 		"/C/xampp/htdocs/gerador-etiquetas-anajustra/dao/AppDAO.class.php",
@@ -747,7 +784,6 @@
 		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/models/Negociacao.js",
 		"/C/xampp/htdocs/simulador_calc_rra/js/app-es6/controllers/SimulacaoController.js",
 		"//192.168.1.160/e$/WWWSITE/api/gerador-etiquetas/index.php",
-		"/C/alura/react_I/cdc-admin/src/index.js",
 		"/C/alura/react_I/index.html",
 		"/C/alura/react_I/cdc-admin/src/App.css",
 		"/C/alura/react_I/cdc-admin/public/index.html",
@@ -763,12 +799,7 @@
 		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/helpers/DateHelper.js",
 		"/C/alura/js_avancado_III/aluraframe/client/js/app/lib/TesteBiblioteca.js",
 		"/C/alura/js_avancado_III/aluraframe/client/.babelrc",
-		"/C/alura/js_avancado_III/aluraframe/client/js/app/controllers/NegociacaoController.js",
-		"/C/wamp64/www/simulador_calc_rra/package.json",
-		"/C/wamp64/www/simulador_calc_rra/js/app/datasource/DataSource.js",
-		"/C/alura/js_avancado_III/aluraframe/client/js/app/models/ListaNegociacoes.js",
-		"/C/alura/js_avancado_III/aluraframe/client/js/app/polyfill/fetch.js",
-		"/C/alura/js_avancado_III/aluraframe/client/js/app/dao/NegociacaoDAO.js"
+		"/C/alura/js_avancado_III/aluraframe/client/js/app/controllers/NegociacaoController.js"
 	],
 	"find":
 	{
@@ -776,9 +807,10 @@
 	},
 	"find_in_files":
 	{
-		"height": 104.0,
+		"height": 107.0,
 		"where_history":
 		[
+			"C:\\xampp\\htdocs\\gerador-etiquetas-anajustra",
 			""
 		]
 	},
@@ -787,6 +819,25 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"=> {",
+			"resposta.excecoes",
+			"excecoes.",
+			"_inputSubmit",
+			"die",
+			"__gravaNaoOk",
+			"die",
+			"compararEnderecoCadastradoComValidadoNosCorreios",
+			"limiteConsultaAssociados",
+			"limiteConsultaAssociadospularValidacaoViaCep",
+			"__gravaNao",
+			"tmpAssociadoNaoOk",
+			"__montaCelulasLinhaplanilhaAnaliseRegiao",
+			"$this->tmpAssociadoOk",
+			"isset($this->tmpAssociado)",
+			"testeMockup",
+			"$this->testeMockup",
+			"$this->teste",
+			"MascaraHelper",
 			"$this->coluna",
 			"$this->linha",
 			"$this->linhaNaoOks",
@@ -852,6 +903,8 @@
 		"regex": false,
 		"replace_history":
 		[
+			"limiteConsultaAssociados",
+			"pularValidacaoViaCep",
 			"$this->colunaPdf",
 			"$this->linhaXlsxNaoOks",
 			"$this->linhaXlsxOks",
@@ -880,46 +933,44 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 4,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "classes/GeradorEtiquetasMain.class.php",
+					"file": "gera-etiquetas-regioestrts.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 28682,
+						"buffer_size": 3672,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4535,
-								4542
+								2886,
+								2886
 							]
 						],
 						"settings":
 						{
-							"SL.24.region_keys":
+							"SL.23.region_keys":
 							[
-								"sublime_linter.protected_regions"
 							],
-							"SL.80.region_keys":
+							"SL.75.region_keys":
 							[
-								"sublime_linter.protected_regions"
 							],
 							"auto_complete": false,
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
+							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 120.0,
+						"translation.y": 303.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -928,20 +979,20 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 911,
+						"buffer_size": 1387,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								655,
-								655
+								217,
+								217
 							]
 						],
 						"settings":
 						{
-							"SL.94.region_keys":
+							"SL.47.region_keys":
 							[
 								"sublime_linter.protected_regions"
 							],
@@ -954,38 +1005,212 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "dao/TmpAssociadoDAO.class.php",
-					"semi_transient": true,
+					"file": "classes/GeradorEtiquetasMain.class.php",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 255,
+						"buffer_size": 34260,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								29575,
+								29575
 							]
 						],
 						"settings":
 						{
-							"SL.107.region_keys":
+							"SL.48.region_keys":
 							[
+								"sublime_linter.protected_regions"
 							],
-							"syntax": "Packages/PHP/PHP.sublime-syntax"
+							"auto_complete": false,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 12640.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "dao/AssociadoDAO.class.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3878,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3381,
+								3381
+							]
+						],
+						"settings":
+						{
+							"SL.54.region_keys":
+							[
+								"sublime_linter.protected_regions"
+							],
+							"auto_complete": false,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 640.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "js/app-es6/controllers/GeradorEtiquetasRegiaoController.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5697,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5288,
+								5288
+							]
+						],
+						"settings":
+						{
+							"SL.40.region_keys":
+							[
+								"SL.jshint.Highlights.|92a09933e5f836f99a2a09592b40a0f9b98683d1a7f67e86d70c0fa0e8ee3986|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Highlights.|979cca5bfdd632c8c7430f533931950d9c6abc95f942e8f07668edc678a6665f|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"sublime_linter.protected_regions",
+								"SL.jshint.Highlights.|7fe10d695ec8e22c773d811ddeeca2a81c376707bbf29c4bd203fbcc0b5f7f74|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Highlights.|2d39d4fc5840167b402d72ecfb07acbeed8ced9d54eea3c210d8d57fe9ef7b0e|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Highlights.|fc4bb08f3313da2f64a033cd4b4380fd0c10d2d6246c5d75392fbaa429a837c3|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Gutter.|source.js meta.function-call.method.js support.function.dom.js|Packages/SublimeLinter/gutter-themes/Default/pointer.png",
+								"SL.jshint.Highlights.|7511dfb642f521a547bcd36b5e580864c0f97a098352a0ac7388b68ccf20a8c8|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Highlights.|dc9a3ed8baa2c4355499bc3c38ffd09482ee4712ffd971d67e34a3c35c7e21b4|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Highlights.|41ae631ed4a3ebe52ef0760f056825c78af678acec2a29499807ee3ed63d08c2|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Highlights.|82f4d45187d0a6d57944b66ae4c67928f3f6e4c0e5336fef21a9d07a53cc6a0d|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Highlights.|b564158291d20fe9f5174565a8d3ef8ca4886662a084e0135d9b1e3081c53a87|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Highlights.|84c12022cfe8c83b13974ee609e7cad0e99fcbe1910c95f413647e433b9b6605|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Highlights.|1233b76ba28790cd71ac534b30d3c3f81b6c7c62f99a603a140ea9c70c8784d6|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Highlights.|a45edfd3023d176ed2f7813c263d5f788639290eac50cc467e682b4a481d1053|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Highlights.|63409e3d2812c3fc276d55672a7ce462c5227d0999c96142b2459945eb49b5d7|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Highlights.|250d1a124fd5d976f5fda73f67b751dc6363bcf64e918d8f6a45c51042e6b612|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Highlights.|fe8ed9724a442182d12b91eb8f80fa26fbe2cb22858735cca5062d8c4e682eff|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Highlights.|5c55ea7bb090f2e0680537efe318d354c3327294a70aa702bf622d652bdc9392|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Highlights.|bb190d41349240e80325f4f1750a16feda71aad937fe496ada5380626e002abe|source.js meta.function-call.method.js support.function.dom.js|1316"
+							],
+							"auto_complete": false,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3120.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "js/app-es6/services/GeradorEtiquetasService.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 820,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								346,
+								346
+							]
+						],
+						"settings":
+						{
+							"SL.46.region_keys":
+							[
+								"SL.jshint.Highlights.|2ccc2d5e261b0421ecd6b588a8516d1c5f49eda515039704350c6e85738357fb|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Highlights.|66e3ffe3b17bce5962b09612ebd720c89ea9ea770430f8d3d3ea549055faacc0|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"sublime_linter.protected_regions",
+								"SL.jshint.Highlights.|84c12022cfe8c83b13974ee609e7cad0e99fcbe1910c95f413647e433b9b6605|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Gutter.|source.js meta.function-call.method.js support.function.dom.js|Packages/SublimeLinter/gutter-themes/Default/pointer.png",
+								"SL.jshint.Highlights.|925bde5b785d31b0ced73fa64faa05e87deb00460db818e3344323d384f7de0e|source.js meta.function-call.method.js support.function.dom.js|1316"
+							],
+							"auto_complete": false,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "js/app-es6/services/HttpService.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 989,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								723,
+								723
+							]
+						],
+						"settings":
+						{
+							"SL.45.region_keys":
+							[
+								"SL.jshint.Highlights.|84c12022cfe8c83b13974ee609e7cad0e99fcbe1910c95f413647e433b9b6605|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"sublime_linter.protected_regions",
+								"SL.jshint.Highlights.|949fcb1ed50e736da64c7a5002f2df808f3869d8d80609e28c2d0d3869a0d1ef|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Highlights.|7265b81d6502888731ec302a0426611d9308f9f36d364d2a0a3206bc2ed6d5e7|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Gutter.|source.js meta.function-call.method.js support.function.dom.js|Packages/SublimeLinter/gutter-themes/Default/pointer.png",
+								"SL.jshint.Highlights.|4ed47e51a2c64fb25053ef3d1f5aea2302db8b3bd8493544d37d0250fce795d4|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Highlights.|88e754ccadd2a643136ab1ed5c899f9b0d745e78c514728f0fe59870ae1ce9e3|source.js meta.function-call.method.js support.function.dom.js|1316"
+							],
+							"auto_complete": false,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 300.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
 					"type": "text"
 				}
 			]
@@ -993,7 +1218,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 32.0
+		"height": 29.0
 	},
 	"input":
 	{
@@ -1038,7 +1263,7 @@
 	"project": "gerador-etiquetas.sublime-project",
 	"replace":
 	{
-		"height": 74.0
+		"height": 54.0
 	},
 	"save_all_on_build": true,
 	"select_file":

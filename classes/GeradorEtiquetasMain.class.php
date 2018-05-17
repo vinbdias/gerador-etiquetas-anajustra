@@ -72,7 +72,7 @@
         private $saidaEm = array('pdf');
 
         private $pularValidacaoViaCep = false;
-        private $limiteConsultaAssociadospularValidacaoViaCep = 50;
+        private $limiteConsultaAssociados = NULL;
 
         private $geraArquivoEnvio = false;
 
@@ -109,7 +109,7 @@
          */
         public function geraEtiquetasRegiao($regiao) {
             
-            $this->associados = $this->associadoDAO->obterAssociadosAPartirDeRegiao($regiao, $this->limiteConsultaAssociadospularValidacaoViaCep);
+            $this->associados = $this->associadoDAO->obterAssociadosAPartirDeRegiao($regiao, $this->limiteConsultaAssociados);
 
             $this->nomeRegiao = (new RegiaoDAO())->obterNomeRegiao($regiao);
             $this->nomePastaRegiao = StringHelper::formataParaNomeDeArquivo($this->nomeRegiao);        
@@ -174,7 +174,7 @@
                
                     $this->__consideracoesFinais($enderecoString);
 
-                    if(isset($this->planilhaAnaliseRegiaoOks)) 
+                    if($this->__issetPlanilhaAnaliseRegiaoOks()) 
                         $this->__gravaOk();
                 }
 
@@ -202,7 +202,7 @@
          */
         private function __gravaOk() {
 
-            $this->tmpAssociadoOk = new TmpAssociado($this->associado, $this->validadorCEP, $this->linhaLogString);                   
+            $this->tmpAssociadoOk = new TmpAssociado($this->associado, $this->validadorCEP, $this->linhaLogString);
         }
 
         /**
@@ -222,15 +222,15 @@
         private function __validarSeDeveContinuarComAssociado($cep) {
 
             //Se o endereço for vazio, pular linha e não gerar etiqueta para o associado em questão
-            if(empty($this->associado->endereco)) {
+            if(empty(trim($this->associado->endereco))) {
 
                 $this->linhaLogString .= 'ENDERECO INADEQUADO PARA GERAR ETIQUETA! CAMPO ENDERECO VAZIO!' . PHP_EOL . PHP_EOL;                
                 return false;
             }              
 
             //Se o CEP for vazio, pular linha e não gerar etiqueta para o associado em questão                
-            if(empty($cep)) {
-                
+            if(empty(str_replace('-', '', $cep))) {
+
                 $this->linhaLogString .= 'ENDERECO INADEQUADO PARA GERAR ETIQUETA! CAMPO CEP VAZIO!' . PHP_EOL . PHP_EOL;            
                 return false;
             }
@@ -266,7 +266,7 @@
                 $this->linhaLogString .= 'Associado com cadastro na tabela funcional.' . PHP_EOL;
 
                 $this->linhaLogString .= 'INICIANDO análise/comparação do endereço cadastrado com o obtido a partir do CEP nos Correios' . PHP_EOL;
-                $this->linhaLogString .= $this->associado->compararEnderecoCadastradoComValidadoNosCorreios($this->validadorCEP);                    
+                $this->linhaLogString .= $this->associado->compararEnderecoCadastradoComValidadoViaCep($this->validadorCEP);                    
                 $this->linhaLogString .= 'Análise/comparação FINALIZADA' . PHP_EOL;
 
                 $enderecoString = ((isset($this->validadorCEP->endereco) && $this->validadorCEP->endereco != '') ? $this->validadorCEP->endereco : $this->associado->endereco) . ' ' .
@@ -583,7 +583,14 @@
          */
         public function saida() {
 
-            $retorno = array();
+            $retorno = array(
+                'mensagem' => '',
+                'nomeXlsx' => '',
+                'nomeXlsxOk' => '',
+                'nomeXlsxNaoOk' => '',
+                'excecoes' => array()
+            );
+            $arquivoGerado = false;
 
             if($this->__issetFpdf()) {
                                 
@@ -592,6 +599,9 @@
                 return true;
             } 
             else {
+
+                if(empty($this->associados))
+                    $retorno['excecoes'][] = 'Nenhum associado encontrado.';
 
                 if($this->__issetPlanilhaExcel()) {  
 
@@ -605,32 +615,41 @@
 
                     $this->escritorPlanilha->save($nomeXlsx);
 
+                    $arquivoGerado = true;
                     $retorno['nomeXlsx'] = UrlHelper::obtemBaseUrl() . str_replace(DS, '/', $nomeXlsx);
                 }      
 
-                if($this->__issetPlanilhaAnaliseRegiaoNaoOks()) {
+                if($this->__issetPlanilhaAnaliseRegiaoNaoOks() && $this->linhaXlsxNaoOks > 2) {
 
                    PastaSaidaXlsxRegiaoFactory::criaPastaSaidaXlsxNaoOksRegiao($this->nomePastaRegiao);
 
                    $nomeXlsxNaoOk = 'arquivos_saida' . DS . 'xlsxs' . DS . $this->nomePastaRegiao . DS . 'nao_oks' . DS . DataHoraFactory::getDataHora()->format('Y-m-d_H-i') . '.xlsx';
                    $this->escritorplanilhaAnaliseRegiaoNaoOks->save($nomeXlsxNaoOk);
 
+                   $arquivoGerado = true;
                    $retorno['nomeXlsxNaoOk'] = UrlHelper::obtemBaseUrl() . str_replace(DS, '/', $nomeXlsxNaoOk);                
                 }            
                 
-                if($this->__issetPlanilhaAnaliseRegiaoOks()) {
-
+                if($this->__issetPlanilhaAnaliseRegiaoOks() && $this->linhaXlsxOks > 2) {
+                    
                     PastaSaidaXlsxRegiaoFactory::criaPastaSaidaXlsxOksRegiao($this->nomePastaRegiao);
 
                     $nomeXlsxOk = 'arquivos_saida' . DS . 'xlsxs' . DS . $this->nomePastaRegiao . DS . 'oks' . DS . DataHoraFactory::getDataHora()->format('Y-m-d_H-i') . '.xlsx';
                     $this->escritorplanilhaAnaliseRegiaoOks->save($nomeXlsxOk); 
 
+                    $arquivoGerado = true;
                     $retorno['nomeXlsxOk'] = UrlHelper::obtemBaseUrl() . str_replace(DS, '/', $nomeXlsxOk);
-                }                        
+                } 
 
+                if($arquivoGerado)
+                    $retorno['mensagem'] = 'Arquivo(s) gerado(s) com sucesso';
+                else
+                    $retorno['excecoes'][] = 'Nenhum arquivo gerado.';
+
+                return $retorno;  
             }
 
-            return $retorno;  
+            return false;
         }
 
         /**
@@ -667,7 +686,7 @@
 
             if(isset($this->planilhaAnaliseRegiaoOks) && is_object($this->planilhaAnaliseRegiaoOks) &&
              (new \ReflectionClass($this->planilhaAnaliseRegiaoOks))->getShortName() == 'Spreadsheet')
-                return true;
+                return true;              
 
             return false;
         }   
@@ -688,7 +707,7 @@
         private function __issetTmpAssociado() {
 
             if(isset($this->tmpAssociado) && is_object($this->tmpAssociado) &&
-             (new \ReflectionClass($this->tmpAssociado))->getShortName() == 'tmpAssociado')            
+             (new \ReflectionClass($this->tmpAssociado))->getShortName() == 'TmpAssociado')            
                 return true;
 
             return false;
@@ -697,8 +716,8 @@
         private function __issetTmpAssociadoOk() {
 
             if(isset($this->tmpAssociadoOk) && is_object($this->tmpAssociadoOk) &&
-             (new \ReflectionClass($this->tmpAssociadoOk))->getShortName() == 'tmpAssociado')
-                return true;
+             (new \ReflectionClass($this->tmpAssociadoOk))->getShortName() == 'TmpAssociado')
+                return true;            
 
             return false;
         }
@@ -706,9 +725,17 @@
         private function __issetTmpAssociadoNaoOk() {
 
             if(isset($this->tmpAssociadoNaoOk) && is_object($this->tmpAssociadoNaoOk) &&
-             (new \ReflectionClass($this->tmpAssociadoNaoOk))->getShortName() == 'tmpAssociado')
+             (new \ReflectionClass($this->tmpAssociadoNaoOk))->getShortName() == 'TmpAssociado')
                 return true;
 
             return false;            
         }
+
+        /**
+         * Método "mágico" invocado quando as funções isset ou empty são chamadas para uma propriedade do objeto
+         */
+        public function __isset($name){
+
+            return isset($this->$name);
+        }         
     }

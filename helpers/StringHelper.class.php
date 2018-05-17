@@ -6,6 +6,36 @@
     abstract class StringHelper {
 
         /**
+         * Método que formata uma dada string, removendo espaços duplos e deixando apenas a primeira letra de cada palavra em caixa alta
+         * @param string $string
+         * @return string
+         */
+        public static function limpaEspacosDuplosCaixaAlta($string) {
+
+            return self::limpaEspacosDuplosEInicioFim(self::caixaAltaApenasPrimeiraLetra($string));
+        }
+
+        /**
+         * Formata uma string de forma a deixar apenas as primeiras letras das palavras em caixa alta
+         * @param string $string
+         * @return string
+         */
+        public static function caixaAltaApenasPrimeiraLetra($string) {
+
+            return ucwords(mb_strtolower(($string)));
+        }
+
+        /**
+         * Remove espaços duplos e do início e fim de uma string
+         * @param string $string
+         * @return string
+         */
+        public static function limpaEspacosDuplosEInicioFim($string) {
+
+            return trim(str_replace('  ', ' ', $string));
+        }
+
+        /**
          * Método que limpa string de caracteres especiais de uma dada string
          * @param string $string
          * @return string
