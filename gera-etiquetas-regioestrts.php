@@ -20,11 +20,15 @@
         <h3 align="center" style="font-weight:bold">Gerador de análises e arquivos para impressão de etiquetas</h3><p>&nbsp;</p></div>
           <div class="panel panel-primary col-md-12">
             <div class="panel-body">
+              <h4><strong class="text-uppercase">Validação ViaCEP?</strong></h4>
+              <div class="form-group">
+                <input type="checkbox" id="validacao-viacep" name="validacao-viacep" value="" />
+              </div>                
               <h4><strong class="text-uppercase">Saídas em arquivo</strong></h4>
               <div class="form-group">
                 <input type="checkbox" class="tipos-saida" id="xlsx" name="tipos-saida[]" value="xlsx" />Excel PIMACO<br />
                 <input type="checkbox" class="tipos-saida" id="xlsxOks" name="tipos-saida[]" value="xlsxOks" />Excel Oks<br />
-                <input type="checkbox" class="tipos-saida" id="xlsxNaoOks" name="tipos-saida[]" value="xlsxNaoOks" />Excel Não Oks<br />                              
+                <input type="checkbox" class="tipos-saida" id="xlsxNaoOks" name="tipos-saida[]" value="xlsxNaoOks" />Excel Não Oks<br />
               </div>              
               <h4><strong class="text-uppercase">Regiões TRT</strong></h4>
             <div class="form-group">

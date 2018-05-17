@@ -15,6 +15,8 @@ class GeradorEtiquetasRegiaoController {
         this._inputTiposSaidaGroup = [$('#xlsx'), $('#xlsxOks'), $('#xlsxNaoOks')];
         this._tiposSaida = [];
 
+        this._inputValidaViaCEP = $('#validacao-viacep');
+
         this._divMensagemErro = $('#mensagem-erro');
 
         this._elementoListaRegioes = $('#lista-regioes');        
@@ -73,7 +75,7 @@ class GeradorEtiquetasRegiaoController {
 
         evento.preventDefault();        
 
-        this._obtemValoresTiposSaidaCheckboxGroup();  
+        this._preparaSubmissao();  
 
         if(!this._validaSubmissao()) {
 
@@ -88,6 +90,16 @@ class GeradorEtiquetasRegiaoController {
         
         this._postaSubmissao();  
      
+    }
+
+    _preparaSubmissao() {    
+        this._obtemValoresTiposSaidaCheckboxGroup();
+
+        return {
+                regiao: regiao,
+                tiposSaida: this._tiposSaida,
+                validaViaCEP: (this._inputValidaViaCEP.prop('checked') ? 1 : 0)
+            };
     }
 
     /**
@@ -105,10 +117,7 @@ class GeradorEtiquetasRegiaoController {
             $('#regiao-' + regiao.id).html(htmlAnterior + ' processando...');
 
             this._geradorEtiquetasService
-                .gerarEtiquetasRegiao({
-                    regiao: regiao,
-                    tiposSaida: this._tiposSaida
-                })
+                .gerarEtiquetasRegiao(this._preparaSubmissao())
                 .then(resposta => {
                     
                     this._trataResposta(regiao.id, resposta);                  
