@@ -36,6 +36,8 @@ class HttpService {
 
             headers: { 'Content-type': 'application/json' },
             method: 'post',
+            mode: 'same-origin',
+            credentials: 'same-origin',            
             body: JSON.stringify(dado)
         })
         .then(res => this._handleErrors(res))

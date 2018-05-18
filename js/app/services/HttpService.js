@@ -59,6 +59,8 @@ var HttpService = function () {
 
                 headers: { 'Content-type': 'application/json' },
                 method: 'post',
+                mode: 'same-origin',
+                credentials: 'same-origin',
                 body: JSON.stringify(dado)
             }).then(function (res) {
                 return _this2._handleErrors(res);
