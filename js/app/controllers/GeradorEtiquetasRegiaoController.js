@@ -190,18 +190,19 @@ var GeradorEtiquetasRegiaoController = function () {
                 value: function _imprimeExcecoes(regiaoId, excecoes) {
 
                         var htmlAnterior = $('#regiao-' + regiaoId).html();
+                        htmlAnterior = htmlAnterior.replace('processando...', '<span style="color: orange;">completo.</span> ');
                         var htmlAConcatenar = '';
 
                         excecoes.forEach(function (excecao) {
 
-                                htmlAConcatenar += ' <span style="color: red;">' + excecao + '</span>';
+                                htmlAConcatenar += ' <span style="color: orange;"><strong>' + excecao + '</strong></span>';
                         });
 
                         $('#regiao-' + regiaoId).html(htmlAnterior + htmlAConcatenar);
                 }
 
                 /**
-                 * Método que imprie a resposta
+                 * Método que imprime a resposta
                  * @param int regiaoId
                  * @param JSON resposta
                  */
@@ -211,9 +212,11 @@ var GeradorEtiquetasRegiaoController = function () {
                 value: function _imprimeResposta(regiaoId, resposta) {
 
                         var htmlAnterior = $('#regiao-' + regiaoId).html();
+                        htmlAnterior = htmlAnterior.replace('processando...', '<span style="color: green;"><strong>completo!</strong></span> ');
+
                         var htmlAConcatenar = '';
 
-                        htmlAConcatenar = '<span style="color: green;">' + resposta.mensagem + ' ' + (resposta.nomeXlsx != '' ? '<a href="' + resposta.nomeXlsx + '" style="color: blue;">Excel PIMACO</a>' : '') + (resposta.nomeXlsxOk != '' ? '<a href="' + resposta.nomeXlsxOk + '" style="color: green;">Excel OKs</a>' : '') + (resposta.nomeXlsxNaoOk != '' ? '<a href="' + resposta.nomeXlsxNaoOk + '" style="color: red">Excel não OKs</a>' : '') + '</span> ';
+                        htmlAConcatenar = '<span style="color: green;">' + resposta.mensagem + ' ' + (resposta.nomeXlsx != '' ? '<a href="' + resposta.nomeXlsx + '" style="color: blue; text-decoration: underline;">Excel PIMACO</a> ' : '') + (resposta.nomeXlsxOk != '' ? '<a href="' + resposta.nomeXlsxOk + '" style="color: green; text-decoration: underline;">Excel OKs</a> ' : '') + (resposta.nomeXlsxNaoOk != '' ? '<a href="' + resposta.nomeXlsxNaoOk + '" style="color: orange; text-decoration: underline;">Excel não OKs</a>' : '') + '</span> ';
 
                         $('#regiao-' + regiaoId).html(htmlAnterior + htmlAConcatenar);
                 }
