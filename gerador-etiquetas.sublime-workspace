@@ -520,10 +520,10 @@
 	"buffers":
 	[
 		{
-			"file": "dao/AppDAO.class.php",
+			"file": "js/app-es6/services/BloodhoundFactory.js",
 			"settings":
 			{
-				"buffer_size": 1071,
+				"buffer_size": 2049,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -532,7 +532,36 @@
 			"file": "classes/GeradorEtiquetasMain.class.php",
 			"settings":
 			{
-				"buffer_size": 34260,
+				"buffer_size": 34259,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "",
+			"file": "js/app/models/ListaRegioes.js",
+			"file_size": 0,
+			"file_write_time": 131713761476828058,
+			"settings":
+			{
+				"buffer_size": 0,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "js/app/models/ListaAssociados.js",
+			"settings":
+			{
+				"buffer_size": 2253,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/app-es6/models/ListaAssociados.js",
+			"settings":
+			{
+				"buffer_size": 1056,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -618,11 +647,23 @@
 		"side_bar_visible": false,
 		"status_bar_visible": false
 	},
+	"expanded_folders":
+	[
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/classes",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/js",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/js/app",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/js/app-es6",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/js/app-es6/controllers",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/js/app-es6/services"
+	],
 	"file_history":
 	[
+		"//192.168.1.160/e$/WWWSITE/api/gerador-etiquetas-anajustra/gera-etiquetas-regioestrts.php",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/classes/GeradorEtiquetasMain.class.php",
+		"/C/xampp/htdocs/gerador-etiquetas-anajustra/dao/AppDAO.class.php",
 		"//192.168.1.160/e$/WWWSITE/api/gerador-etiquetas-anajustra/services/ConexaoPDOFactory.class.php",
 		"/C/xampp/htdocs/gerador-etiquetas-anajustra/js/app-es6/models/ListaAssociados.js",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/classes/GeradorEtiquetasMain.class.php",
 		"/C/xampp/htdocs/gerador-etiquetas-anajustra/js/app-es6/controllers/GeradorEtiquetasRegiaoController.js",
 		"/C/xampp/htdocs/gerador-etiquetas-anajustra/services/ConexaoPDOFactory.class.php",
 		"/C/xampp/htdocs/gerador-etiquetas-anajustra/vendor/phpclasses/dao-for-php/DAO.php",
@@ -666,7 +707,6 @@
 		"/C/xampp/htdocs/gerador-etiquetas-anajustra/vendor/psr/simple-cache/src/CacheInterface.php",
 		"/C/xampp/htdocs/gerador-etiquetas-anajustra/services/ArquivoLogFactory.class.php",
 		"/C/xampp/htdocs/gerador-etiquetas-anajustra/services/ViaCEPService.class.php",
-		"/C/xampp/htdocs/gerador-etiquetas-anajustra/dao/AppDAO.class.php",
 		"/C/xampp/htdocs/gerador-etiquetas-anajustra/testePHPOfficeSpreadsheet.php",
 		"/C/xampp/htdocs/gerador-etiquetas-anajustra/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/Worksheet.php",
 		"/C/xampp/htdocs/gerador-etiquetas-anajustra/fpdf/fpdf.php",
@@ -746,8 +786,7 @@
 		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/models/ListaNegociacoes.js",
 		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/views/View.js",
 		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/views/MensagemView.js",
-		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/helpers/DateHelper.js",
-		"/C/alura/js_avancado_III/aluraframe/client/js/app/lib/TesteBiblioteca.js"
+		"/C/alura/js_avancado_III/aluraframe/client/js/app-es6/helpers/DateHelper.js"
 	],
 	"find":
 	{
@@ -767,6 +806,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"PHP_EOL",
 			"anajustra",
 			"_postaSubmissao",
 			"n _postaSubmissao",
@@ -889,11 +929,86 @@
 			[
 				{
 					"buffer": 0,
-					"file": "dao/AppDAO.class.php",
+					"file": "js/app-es6/services/BloodhoundFactory.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1071,
+						"buffer_size": 2049,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1223,
+								1231
+							]
+						],
+						"settings":
+						{
+							"SL.24.region_keys":
+							[
+								"sublime_linter.protected_regions",
+								"SL.jshint.Highlights.|679fa033214bdf6d6202436837bdad73be4da1c78e2bdf5c8c0354a25034d2ce|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Highlights.|7474deeda7aefddafe05a51c89beb2a18ea5e5903c481e682680bf7b18e020cd|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Gutter.|source.js meta.function-call.method.js support.function.dom.js|Packages/SublimeLinter/gutter-themes/Default/pointer.png"
+							],
+							"auto_complete": false,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "classes/GeradorEtiquetasMain.class.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 34259,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5200,
+								5207
+							]
+						],
+						"settings":
+						{
+							"SL.14.region_keys":
+							[
+							],
+							"SL.26.region_keys":
+							[
+							],
+							"auto_complete": false,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2400.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "js/app/models/ListaRegioes.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 0,
 						"regions":
 						{
 						},
@@ -906,12 +1021,14 @@
 						],
 						"settings":
 						{
-							"SL.17.region_keys":
+							"SL.15.region_keys":
 							[
 							],
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"SL.28.region_keys":
+							[
+							],
+							"open_with_edit": true,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -921,36 +1038,77 @@
 					"type": "text"
 				},
 				{
-					"buffer": 1,
-					"file": "classes/GeradorEtiquetasMain.class.php",
-					"semi_transient": false,
+					"buffer": 3,
+					"file": "js/app/models/ListaAssociados.js",
+					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 34260,
+						"buffer_size": 2253,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								568,
-								568
+								993,
+								993
 							]
 						],
 						"settings":
 						{
-							"SL.18.region_keys":
+							"SL.29.region_keys":
 							[
+								"SL.jshint.Highlights.|b233e4afd49ab4c36eaf42a33ba9d8734c5022ff090e17d41f849c78a305345a|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Gutter.|source.js meta.function-call.method.js support.function.dom.js|Packages/SublimeLinter/gutter-themes/Default/pointer.png",
+								"SL.jshint.Highlights.|f14a531e5230fbf8cbedfe7151a8b1b3d66a954370a73c9b381683d1ccb77f44|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"sublime_linter.protected_regions"
 							],
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4540.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "js/app-es6/models/ListaAssociados.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1056,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								848,
+								848
+							]
+						],
+						"settings":
+						{
+							"SL.22.region_keys":
+							[
+								"SL.jshint.Highlights.|84c12022cfe8c83b13974ee609e7cad0e99fcbe1910c95f413647e433b9b6605|source.js meta.function-call.method.js support.function.dom.js|1316",
+								"SL.jshint.Gutter.|source.js meta.function-call.method.js support.function.dom.js|Packages/SublimeLinter/gutter-themes/Default/pointer.png",
+								"sublime_linter.protected_regions",
+								"SL.jshint.Highlights.|d4895a60e0772ba4e53fc6dbafeb00a6b7b80909c8571d98483596ffc7d53569|source.js meta.function-call.method.js support.function.dom.js|1316"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
 					"type": "text"
 				}
 			]

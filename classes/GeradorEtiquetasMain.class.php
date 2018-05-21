@@ -82,7 +82,7 @@
          * Método construtor
          * @param array $saidaEm
          */
-        public function __construct($saidaEm = array('pdf'), $pularValidacaoViaCep = false, $salvarArquivoLog = false) {
+        public function __construct($saidaEm = array('pdf'), $pularValidacaoViaCep = true, $salvarArquivoLog = false) {
         
             $this->saidaEm = $saidaEm;
 

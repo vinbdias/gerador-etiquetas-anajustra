@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "bloodhound": "^1.0.0",
+    "eslint": "^4.19.1",
     "jquery-mask-plugin": "^1.14.15",
     "typeahead": "^0.2.2"
   }
