@@ -1,5 +1,5 @@
 /**
- * Método responsável por tratar requisições que tratam de gerar análises de cadastro de endereço ou arquivos para etiquetas
+ * Classe responsável por tratar requisições http que tratam de gerar análises de cadastro de endereço ou arquivos para etiquetas
  */
 class GeradorEtiquetasService extends HttpService {
 
@@ -13,15 +13,11 @@ class GeradorEtiquetasService extends HttpService {
 
             this
             .post('gera-etiquetas-regiaotrts.php', dados)
-            .then((resposta) => {
-
-                console.log('Etiquetas geradas com sucesso.');
-                resolve(resposta);
-            })
+            .then((resposta) => resolve(resposta))
             .catch(erro => {
-
-                console.log(erro);
+                
                 reject('Não foi possível gerar etiquetas para a região ' + dados.regiao.lotacao);
+                throw new Error(erro);
             });
         });
     }

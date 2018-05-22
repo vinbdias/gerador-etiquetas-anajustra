@@ -9,7 +9,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 /**
- * Método responsável por tratar requisições que tratam de gerar análises de cadastro de endereço ou arquivos para etiquetas
+ * Classe responsável por tratar requisições http que tratam de gerar análises de cadastro de endereço ou arquivos para etiquetas
  */
 var GeradorEtiquetasService = function (_HttpService) {
     _inherits(GeradorEtiquetasService, _HttpService);
@@ -34,13 +34,11 @@ var GeradorEtiquetasService = function (_HttpService) {
             return new Promise(function (resolve, reject) {
 
                 _this2.post('gera-etiquetas-regiaotrts.php', dados).then(function (resposta) {
-
-                    console.log('Etiquetas geradas com sucesso.');
-                    resolve(resposta);
+                    return resolve(resposta);
                 }).catch(function (erro) {
 
-                    console.log(erro);
                     reject('Não foi possível gerar etiquetas para a região ' + dados.regiao.lotacao);
+                    throw new Error(erro);
                 });
             });
         }

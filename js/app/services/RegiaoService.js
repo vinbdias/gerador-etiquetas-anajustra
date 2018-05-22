@@ -28,8 +28,8 @@ var RegiaoService = function (_HttpService) {
                     return resolve(regioes);
                 }).catch(function (erro) {
 
-                    console.log(erro);
                     reject('Não foi possível obter as regiões.');
+                    throw new Error(erro);
                 });
             });
         }

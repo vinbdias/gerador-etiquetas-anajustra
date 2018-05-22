@@ -50,12 +50,10 @@ class GeradorEtiquetasRegiaoController {
 
                 this._inputSubmitButton.prop('disabled', false);
             })        
-            .catch(erro => console.log(erro));
+            .catch(erro => { throw new Error(erro) });
     }
 
     _obtemValoresTiposSaidaCheckboxGroup() {
-        
-        let tiposSaida = [];
 
         this._inputTiposSaidaGroup.forEach(elemento => {
             
@@ -126,17 +124,14 @@ class GeradorEtiquetasRegiaoController {
 
             this._geradorEtiquetasService
                 .gerarEtiquetasRegiao(this._preparaSubmissao(regiao))
-                .then(resposta => {
-                    
-                    this._trataResposta(regiao.id, resposta);                  
-                })
+                .then(resposta => this._trataResposta(regiao.id, resposta))
                 .catch(erro => {
                     
                     htmlAConcatenar = '<span style="color: red;"> erro ao gerar etiquetas!</span>';
 
                     $('#regiao-' + regiao.id).html('');
                     $('#regiao-' + regiao.id).html(htmlAnterior + htmlAConcatenar);
-                    console.log(erro);
+                    throw new Error(erro);
                 });            
         });         
     }

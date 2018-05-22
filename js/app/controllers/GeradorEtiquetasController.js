@@ -165,7 +165,7 @@ var GeradorEtiquetasController = function () {
         }
 
         /**
-         * Método responsável por gerenciar o comportamento de "submit" da página. 
+         * Método responsável por gerenciar o comportamento de "submit" da página.
          * Redireciona para a página responsável por gerar o .pdf das etiquetas.
          * @param Event event: evento responsável por acionar a execução deste método
          */

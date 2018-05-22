@@ -60,15 +60,13 @@ var GeradorEtiquetasRegiaoController = function () {
 
                                 _this._inputSubmitButton.prop('disabled', false);
                         }).catch(function (erro) {
-                                return console.log(erro);
+                                throw new Error(erro);
                         });
                 }
         }, {
                 key: '_obtemValoresTiposSaidaCheckboxGroup',
                 value: function _obtemValoresTiposSaidaCheckboxGroup() {
                         var _this2 = this;
-
-                        var tiposSaida = [];
 
                         this._inputTiposSaidaGroup.forEach(function (elemento) {
 
@@ -146,15 +144,14 @@ var GeradorEtiquetasRegiaoController = function () {
                                 $('#regiao-' + regiao.id).html(htmlAnterior + ' processando...');
 
                                 _this3._geradorEtiquetasService.gerarEtiquetasRegiao(_this3._preparaSubmissao(regiao)).then(function (resposta) {
-
-                                        _this3._trataResposta(regiao.id, resposta);
+                                        return _this3._trataResposta(regiao.id, resposta);
                                 }).catch(function (erro) {
 
                                         htmlAConcatenar = '<span style="color: red;"> erro ao gerar etiquetas!</span>';
 
                                         $('#regiao-' + regiao.id).html('');
                                         $('#regiao-' + regiao.id).html(htmlAnterior + htmlAConcatenar);
-                                        console.log(erro);
+                                        throw new Error(erro);
                                 });
                         });
                 }
