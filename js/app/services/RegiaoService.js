@@ -26,10 +26,8 @@ var RegiaoService = function (_HttpService) {
 
                 _this2.get('pesquisa-regioestrts.php').then(function (regioes) {
                     return resolve(regioes);
-                }).catch(function (erro) {
-
-                    reject('Não foi possível obter as regiões.');
-                    throw new Error(erro);
+                }).catch(function () {
+                    return reject('Não foi possível obter as regiões.');
                 });
             });
         }

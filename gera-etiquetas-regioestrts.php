@@ -20,7 +20,7 @@
         <h3 align="center" style="font-weight:bold">Gerador de análises e arquivos para impressão de etiquetas</h3><p>&nbsp;</p></div>
           <div class="panel panel-primary col-md-12">
             <div class="panel-body">
-              <h4><strong class="text-uppercase">Validação ViaCEP?</strong></h4>
+              <h4><strong class="text-uppercase">Validação ViaCEP</strong>&nbsp;<a href="https://viacep.com.br/"><i>(https://viacep.com.br)</i></a><strong>?</strong></h4>
               <div class="form-group">
                 <input type="checkbox" id="validacao-viacep" name="validacao-viacep" value="" />
               </div>                

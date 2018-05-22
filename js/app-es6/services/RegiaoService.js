@@ -7,11 +7,7 @@ class RegiaoService extends HttpService {
             this
             .get('pesquisa-regioestrts.php')
             .then(regioes => resolve(regioes))
-            .catch(erro => {
-                
-                reject('Não foi possível obter as regiões.');
-                throw new Error(erro);
-            });             
+            .catch(() => reject('Não foi possível obter as regiões.'));             
         });     
     }
 }

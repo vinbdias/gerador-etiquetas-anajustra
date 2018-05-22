@@ -151,7 +151,6 @@ var GeradorEtiquetasRegiaoController = function () {
 
                                         $('#regiao-' + regiao.id).html('');
                                         $('#regiao-' + regiao.id).html(htmlAnterior + htmlAConcatenar);
-                                        throw new Error(erro);
                                 });
                         });
                 }

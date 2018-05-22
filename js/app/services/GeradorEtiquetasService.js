@@ -35,10 +35,8 @@ var GeradorEtiquetasService = function (_HttpService) {
 
                 _this2.post('gera-etiquetas-regiaotrts.php', dados).then(function (resposta) {
                     return resolve(resposta);
-                }).catch(function (erro) {
-
-                    reject('Não foi possível gerar etiquetas para a região ' + dados.regiao.lotacao);
-                    throw new Error(erro);
+                }).catch(function () {
+                    return reject('Não foi possível gerar etiquetas para a região ' + dados.regiao.lotacao);
                 });
             });
         }

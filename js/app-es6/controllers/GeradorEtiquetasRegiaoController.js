@@ -130,8 +130,7 @@ class GeradorEtiquetasRegiaoController {
                     htmlAConcatenar = '<span style="color: red;"> erro ao gerar etiquetas!</span>';
 
                     $('#regiao-' + regiao.id).html('');
-                    $('#regiao-' + regiao.id).html(htmlAnterior + htmlAConcatenar);
-                    throw new Error(erro);
+                    $('#regiao-' + regiao.id).html(htmlAnterior + htmlAConcatenar);                    
                 });            
         });         
     }

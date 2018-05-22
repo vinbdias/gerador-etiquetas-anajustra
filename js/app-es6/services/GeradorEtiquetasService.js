@@ -14,11 +14,7 @@ class GeradorEtiquetasService extends HttpService {
             this
             .post('gera-etiquetas-regiaotrts.php', dados)
             .then((resposta) => resolve(resposta))
-            .catch(erro => {
-                
-                reject('Não foi possível gerar etiquetas para a região ' + dados.regiao.lotacao);
-                throw new Error(erro);
-            });
+            .catch(() => reject('Não foi possível gerar etiquetas para a região ' + dados.regiao.lotacao));
         });
     }
 }
